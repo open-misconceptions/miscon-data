@@ -20,6 +20,8 @@ Before 1.0, minor releases may also change the schema; each such change is calle
 * **Diagnosis records use `miscon_id` and `miscon_version`** in place of the `oml_`-prefixed fields.
 * **The library moved to a neutral home.** Canonical base URI is now `https://open-misconceptions.github.io/miscon-data`, and the repository is `open-misconceptions/miscon-data`. **`miscon:` IDs are unchanged and stable** — `miscon:math.fractions.add-across` still means exactly what it meant; only the host that resolves it moved. Applied with `miscon rebase-uri`, which rewrote 188 references across 83 files. The Hugging Face dataset is now `open-misconceptions/miscon-data`.
 * **The record licence is unchanged: CC BY 4.0.** A move to CC0 was considered for this release and rejected. CC BY's obligation lands on redistribution rather than use, it is what [OBO Foundry principle 1](https://obofoundry.org/principles/fp-001-open.html) and the Gene Ontology settle on for a resource of this kind, and it keeps the licence continuous across the DOI lineage. Tooling stays MIT. The CASE export's licence title is now read from `miscon.config.json` instead of being hardcoded, so the exported document and the licence URL can no longer disagree.
+* **`CONTRIBUTING.md` leads with propose, not contribute.** The front door is an issue; external pull requests are not merged during v0.x, and the path to Contributor (three accepted proposals) is stated. Licence section names the banks whose text must not be pasted, and documents `git commit -s`.
+* **The reviewer registry is now authoritative.** A human review with verdict `accept` from a handle not in `reviewers/registry.json` is an error, not a warning: adding yourself to a record no longer promotes it.
 * **The library is maintained by Vikram Maram as an individual project.** The MIT copyright holder, the `creator` in `miscon.config.json` (which flows into the CASE `CFDocument`), and the dataset-card attribution now name the maintainer rather than a company. Nothing about the `miscon:` IDs changes.
 
 ### Added
@@ -36,6 +38,10 @@ Before 1.0, minor releases may also change the schema; each such change is calle
 * **Governance gates** (`.github/workflows/gate.yml`): pull requests from outside the contributor list are closed with a pointer to the issue templates; issues that never completed a template are closed after 7 days (the `keep-open` label exempts one). `CODEOWNERS` names the maintainer.
 * Zenodo concept DOI 10.5281/zenodo.22416011 in `CITATION.cff`, the README badge and the dataset card (minted on v0.1.1; version DOI 10.5281/zenodo.22416012).
 
+### Fixed
+
+* **The released `[0.1.1]` section said things v0.1.1 did not ship.** The move to the new home had run its find-and-replace through the released sections, making them claim the release mirrored to `open-misconceptions/oml`; `git show v0.1.1:CHANGELOG.md` says `vikram-learnco/oml`. Two bullets describing the `CONTRIBUTING.md` rework and the authoritative reviewer registry were also filed under `[0.1.1]` although both landed after the tag, and have moved to Unreleased. A changelog that edits its own history is worth less than no changelog. The link definitions at the foot are the deliberate exception: they are navigation, so they point at the repository's current home.
+
 ## [0.1.1] - 2026-09-05
 
 First release archived by Zenodo; the concept DOI is minted on this tag.
@@ -48,12 +54,7 @@ First release archived by Zenodo; the concept DOI is minted on this tag.
 * New optional top-level `notes` field for text that is not the belief itself (e.g. likely origins).
 * `math.frac.add-across` (record #1, version 1.1.0): statement trimmed to the belief; likely origins moved to `notes`; review closed with Vikram Maram on 2026-09-05 and recorded as `reviews[]` (human accept, model accept, two attested reviews); `status: reviewed`, `trust: high`.
 * Every other record gains a changelog entry and a patch version bump for the migration; all remain `draft` with `trust: low`.
-* Hugging Face mirror targets the dataset `open-misconceptions/oml`.
-
-### Changed
-
-* **`CONTRIBUTING.md` leads with propose, not contribute.** The front door is an issue; external pull requests are not merged during v0.x, and the path to Contributor (three accepted proposals) is stated. Licence section names the banks whose text must not be pasted, and documents `git commit -s`.
-* **The reviewer registry is now authoritative.** A human review with verdict `accept` from a handle not in `reviewers/registry.json` is an error, not a warning: adding yourself to a record no longer promotes it.
+* Hugging Face mirror targets the dataset `vikram-learnco/oml`.
 
 ### Fixed
 
@@ -82,6 +83,6 @@ First citable release.
 
 * Base URI `https://oml.learnco.io` is a placeholder pending the domain decision.
 
-[Unreleased]: https://github.com/open-misconceptions/oml/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/open-misconceptions/oml/releases/tag/v0.1.1
-[0.1.0]: https://github.com/open-misconceptions/oml/releases/tag/v0.1.0
+[Unreleased]: https://github.com/open-misconceptions/miscon-data/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.1
+[0.1.0]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.0
