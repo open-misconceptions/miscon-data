@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use the Open Misconceptions, please cite it as below. Cite individual records by their miscon: ID and URI."
+message: "If you use Open Misconceptions, please cite it as below. Cite individual records by their miscon: ID and URI."
 title: "Open Misconceptions"
 abstract: "A public, versioned catalogue of misconceptions with stable IDs, evidence patterns, discriminators and provenance, distributed as JSON and as a 1EdTech CASE 1.1 framework."
 type: dataset

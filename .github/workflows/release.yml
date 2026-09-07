@@ -41,12 +41,50 @@ jobs:
             echo "Tag ${RELEASE_TAG} does not exist; it will be created at ${GITHUB_SHA::7} when the release is published"
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: The library version must be the version being released
+        run: |
+          set -euo pipefail
+          want="${RELEASE_TAG#v}"
+          have="$(python3 -c 'import json; print(json.load(open("miscon.config.json"))["library_version"])')"
+          if [ "$have" != "$want" ]; then
+            {
+              echo "### Release refused"
+              echo
+              echo "\`library_version\` in \`miscon.config.json\` is \`${have}\`, but this release is \`${RELEASE_TAG}\`."
+              echo
+              echo "That field is hand-maintained and it is not cosmetic: the Pages site is built from"
+              echo "\`main\` and prints it in the footer, so releasing now would publish a site naming"
+              echo "the wrong version, with nothing to correct it afterwards."
+              echo
+              echo "Set it to \`${want}\`, commit, then release again."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::library_version is ${have}, expected ${want} for ${RELEASE_TAG}"
+            exit 1
+          fi
+          echo "library_version ${have} matches ${RELEASE_TAG}." | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -e tools/miscon
       - run: python -m unittest discover -s tools/tests
       - run: miscon validate records/ --strict
+      - name: Stamp CITATION.cff with the tag
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime, os, pathlib, re
+
+          tag = os.environ["RELEASE_TAG"]
+          path = pathlib.Path("CITATION.cff")
+          text = path.read_text(encoding="utf-8")
+          text, n = re.subn(r"(?m)^version: .*$", f"version: {tag.lstrip('v')}", text, count=1)
+          assert n == 1, "CITATION.cff has no version field"
+          today = datetime.date.today().isoformat()
+          text, n = re.subn(r"(?m)^date-released: .*$", f"date-released: {today}", text, count=1)
+          assert n == 1, "CITATION.cff has no date-released field"
+          path.write_text(text, encoding="utf-8")
+          print(f"CITATION.cff stamped: version {tag.lstrip('v')}, date-released {today}")
+          PY
       - name: Export distributions stamped with the tag
         run: miscon export all --version "${RELEASE_TAG#v}"
       - name: Attach distributions to the GitHub release

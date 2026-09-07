@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://open-misconceptions.github.io/miscon-data/schema/miscon-record.schema.json",
   "title": "Open Misconceptions record",
-  "description": "One misconception in the Open Misconceptions. Schema version 0.2 (v0.1.1 release): framework-agnostic alignments, reviews[] with a status lifecycle, computed trust.",
+  "description": "One misconception in Open Misconceptions. Schema version 0.2 (v0.1.1 release): framework-agnostic alignments, reviews[] with a status lifecycle, computed trust.",
   "type": "object",
   "additionalProperties": false,
   "required": [

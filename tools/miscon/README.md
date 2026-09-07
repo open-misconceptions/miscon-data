@@ -1,6 +1,6 @@
 # miscon-tools
 
-Command-line tooling for the Open Misconceptions. Python 3.10+,
+Command-line tooling for Open Misconceptions. Python 3.10+,
 `jsonschema` is the only dependency.
 
 ```sh
