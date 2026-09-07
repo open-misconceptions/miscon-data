@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schema/miscon-record.schema.json",
+  "id": "programming.variables.assignment-is-equation",
+  "uri": "https://open-misconceptions.github.io/miscon-data/m/programming.variables.assignment-is-equation",
+  "uuid": "1d678f7e-ebf2-49bf-979f-eb433148cc0e",
+  "version": "0.1.1",
+  "status": "draft",
+  "trust": "low",
+  "title": "Assignment states an equation",
+  "statement": "The equals sign in an assignment states that the two sides are equal, as in algebra, so x = x + 1 is a contradiction and a = b and b = a mean the same thing.",
+  "kind": "misapplied-analogy",
+  "domain": "programming.variables",
+  "about": [
+    {
+      "scheme": "Miscon",
+      "uri": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment"
+    }
+  ],
+  "level_band": [
+    "secondary",
+    "undergraduate",
+    "adult"
+  ],
+  "locale": "en",
+  "evidence_patterns": [
+    {
+      "item_shape": "trace an assignment whose right-hand side uses the variable being assigned",
+      "signature": "declares the statement impossible or leaves the variable unchanged",
+      "example": {
+        "item": "x = 5\nx = x + 1\nWhat is x?",
+        "expected": "6",
+        "response": "'Impossible, x can't equal x + 1' (or 5)"
+      }
+    },
+    {
+      "item_shape": "trace an assignment with the variables in the 'wrong' order",
+      "signature": "treats a = b as also setting b from a, or asks which one changes",
+      "example": {
+        "item": "a = 1\nb = 2\na = b\nWhat are a and b?",
+        "expected": "a is 2, b is 2",
+        "response": "a is 1, b is 1 (or 'they are now the same variable')"
+      }
+    }
+  ],
+  "discriminators": {
+    "vs_slip": "Consistent across items; the learner uses the words 'equals' or 'is the same as' and objects to x = x + 1. A slip is a wrong final value with an otherwise correct trace.",
+    "vs": {
+      "programming.variables.assignment-links-variables": "Linkers accept a = b as directional but expect later changes to b to show up in a; equation believers object at the moment of assignment.",
+      "programming.variables.assignment-moves-value": "Movers empty the source variable; equation believers keep both sides equal."
+    }
+  },
+  "relations": {
+    "conflicts_with": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment",
+        "label": "Assignment copies a value into a variable at one moment"
+      }
+    ],
+    "resolved_by": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment",
+        "label": "Assignment copies a value into a variable at one moment"
+      }
+    ],
+    "confusable_with": [
+      "programming.variables.assignment-links-variables",
+      "programming.variables.assignment-moves-value"
+    ]
+  },
+  "alignments": [
+    {
+      "scheme": "progmiscon",
+      "code": "Java/AssignCompares",
+      "uri": "https://progmiscon.org/misconceptions/Java/AssignCompares",
+      "relation": "close-match",
+      "note": "progmiscon's entry covers reading = as a comparison; this record covers the underlying algebraic reading."
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "type": "paper",
+        "citation": "du Boulay, B. (1986). Some difficulties of learning to program. Journal of Educational Computing Research, 2(1), 57-73.",
+        "doi": "10.2190/3LFX-9RRF-67T8-UVK9",
+        "note": "Notional machine difficulties; the equals sign carrying its mathematical meaning."
+      },
+      {
+        "type": "book",
+        "citation": "Sorva, J. (2012). Visual Program Simulation in Introductory Programming Education (Doctoral dissertation, Aalto University). Appendix A catalogues introductory programming misconceptions from the literature.",
+        "url": "https://aaltodoc.aalto.fi/handle/123456789/3534"
+      },
+      {
+        "type": "paper",
+        "citation": "Qian, Y., & Lehman, J. (2017). Students' misconceptions and other difficulties in introductory programming: A literature review. ACM Transactions on Computing Education, 18(1), Article 1.",
+        "doi": "10.1145/3077618"
+      },
+      {
+        "type": "inventory",
+        "citation": "Chiodini, L., Moreno Santos, I., Gallidabino, A., Tafliovich, A., Santos, A. L., & Hauswirth, M. (2021). A curated inventory of programming language misconceptions. In Proceedings of the 26th ACM Conference on Innovation and Technology in Computer Science Education (ITiCSE '21), 380-386.",
+        "doi": "10.1145/3430665.3456343",
+        "url": "https://progmiscon.org/",
+        "note": "Inventory consulted for the misconception name and scope only; progmiscon publishes no licence for its text, so Open Misconceptions' statements and examples are written independently."
+      }
+    ],
+    "origin": "llm-drafted",
+    "notes": "Drafted from the cited literature for the Open Misconceptions seed pack; statement, examples and discriminators are original text. Awaiting maintainer review."
+  },
+  "history": {
+    "changelog": [
+      {
+        "version": "0.1.1",
+        "date": "2026-09-05",
+        "change": "Schema 0.2 migration: about/alignments carry a free-string scheme (corestandards.org URLs relabelled CCSS where present); trust computed from reviews[] (none yet, so low); no change to the statement or evidence."
+      }
+    ]
+  },
+  "license": "CC-BY-4.0"
+}

@@ -1,5 +1,5 @@
 {
-  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `oml validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema.",
+  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `miscon validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema.",
   "schemes": [
     {
       "name": "CASE",
@@ -8,10 +8,10 @@
       "homepage": "https://www.1edtech.org/standards/case"
     },
     {
-      "name": "OML",
-      "description": "OML concept URIs, <base>/c/<concept-id>, used only where no CASE URI exists.",
-      "uri_pattern": "^https://open\\-misconceptions\\.github\\.io/oml/c/[a-z]+(\\.[a-z0-9-]+)+$",
-      "homepage": "https://open-misconceptions.github.io/oml"
+      "name": "Miscon",
+      "description": "Miscon concept URIs, <base>/c/<concept-id>, used only where no CASE URI exists.",
+      "uri_pattern": "^https://open\\-misconceptions\\.github\\.io/miscon\\-data/c/[a-z]+(\\.[a-z0-9-]+)+$",
+      "homepage": "https://open-misconceptions.github.io/miscon-data"
     },
     {
       "name": "CCSS",

@@ -7,7 +7,7 @@ body:
     id: record
     attributes:
       label: Record ID
-      placeholder: math.frac.add-across
+      placeholder: math.fractions.add-across
     validations:
       required: true
   - type: dropdown

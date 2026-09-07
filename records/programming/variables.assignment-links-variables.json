@@ -1,0 +1,97 @@
+{
+  "$schema": "../../schema/miscon-record.schema.json",
+  "id": "programming.variables.assignment-links-variables",
+  "uri": "https://open-misconceptions.github.io/miscon-data/m/programming.variables.assignment-links-variables",
+  "uuid": "3c50552e-a1f7-4d39-b0e5-1e1673032c7b",
+  "version": "0.1.1",
+  "status": "draft",
+  "trust": "low",
+  "title": "Assignment links two variables",
+  "statement": "After a = b the two variables are connected, so whenever b changes later, a changes too.",
+  "kind": "misapplied-analogy",
+  "domain": "programming.variables",
+  "about": [
+    {
+      "scheme": "Miscon",
+      "uri": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment"
+    }
+  ],
+  "level_band": [
+    "secondary",
+    "undergraduate",
+    "adult"
+  ],
+  "locale": "en",
+  "evidence_patterns": [
+    {
+      "item_shape": "trace a change to the source variable after an assignment between primitives",
+      "signature": "reports the destination variable as having the source's new value",
+      "example": {
+        "item": "a = 1\nb = a\na = 7\nWhat is b?",
+        "expected": "1",
+        "response": "7"
+      }
+    }
+  ],
+  "discriminators": {
+    "vs_slip": "A slip gives the wrong value once. The belief is stated ('b is a now') and holds on every item where the source is later reassigned.",
+    "vs": {
+      "programming.variables.assignment-is-equation": "Equation believers object to x = x + 1; linkers do not.",
+      "programming.objects.assignment-copies-object": "The object case is the mirror image: there the learner expects independence and gets aliasing. Test with a primitive and an object item."
+    }
+  },
+  "relations": {
+    "conflicts_with": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment",
+        "label": "Assignment copies a value into a variable at one moment"
+      }
+    ],
+    "resolved_by": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.assignment",
+        "label": "Assignment copies a value into a variable at one moment"
+      },
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.variables.variable",
+        "label": "A variable holds exactly one value at a time"
+      }
+    ],
+    "confusable_with": [
+      "programming.variables.assignment-is-equation",
+      "programming.variables.assignment-moves-value"
+    ]
+  },
+  "provenance": {
+    "sources": [
+      {
+        "type": "paper",
+        "citation": "Ma, L., Ferguson, J., Roper, M., & Wood, M. (2007). Investigating the viability of mental models held by novice programmers. In Proceedings of the 38th SIGCSE Technical Symposium on Computer Science Education (SIGCSE '07), 499-503.",
+        "doi": "10.1145/1227310.1227481",
+        "note": "Non-viable mental models of value assignment among novices."
+      },
+      {
+        "type": "book",
+        "citation": "Sorva, J. (2012). Visual Program Simulation in Introductory Programming Education (Doctoral dissertation, Aalto University). Appendix A catalogues introductory programming misconceptions from the literature.",
+        "url": "https://aaltodoc.aalto.fi/handle/123456789/3534"
+      },
+      {
+        "type": "paper",
+        "citation": "Sirkiä, T., & Sorva, J. (2012). Exploring programming misconceptions: An analysis of student mistakes in visual program simulation exercises. In Proceedings of the 12th Koli Calling International Conference on Computing Education Research, 19-28.",
+        "doi": "10.1145/2401796.2401799"
+      }
+    ],
+    "origin": "llm-drafted",
+    "notes": "Drafted from the cited literature for the Open Misconceptions seed pack; statement, examples and discriminators are original text. Awaiting maintainer review."
+  },
+  "history": {
+    "changelog": [
+      {
+        "version": "0.1.1",
+        "date": "2026-09-05",
+        "change": "Schema 0.2 migration: about/alignments carry a free-string scheme (corestandards.org URLs relabelled CCSS where present); trust computed from reviews[] (none yet, so low); no change to the statement or evidence."
+      }
+    ]
+  },
+  "license": "CC-BY-4.0"
+}

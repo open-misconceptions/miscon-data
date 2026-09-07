@@ -1,16 +1,19 @@
 {
-  "$comment": "Reviewer registry. Trust lives here, outside the record schema, so it can be revised without touching records. A record's `trust` is computed by `oml trust` from its `reviews[]` against these weights and must never be hand-typed; `oml validate` fails on a stored value that does not match the computed one. Score = sum of weights of `accept` reviews whose reviewer is listed (attested reviews use the `attested` entry). Thresholds: high >= 1.0, medium >= 0.5, otherwise low.",
+  "$comment": "Reviewer registry. Trust lives here, outside the record schema, so it can be revised without touching records. A record's `trust` is computed by `miscon trust` from its `reviews[]` against these weights and must never be hand-typed; `miscon validate` fails on a stored value that does not match the computed one. Score = sum of weights of `accept` reviews whose reviewer is listed (attested reviews use the `attested` entry). An entry may carry `aliases`: earlier handles for the same person, which resolve to that entry's weight, so a review recorded under an old handle keeps counting. Thresholds: high >= 1.0, medium >= 0.5, otherwise low.",
   "thresholds": {
     "high": 1.0,
     "medium": 0.5
   },
   "reviewers": [
     {
-      "id": "github:vikram-learnco",
+      "id": "orcid:0009-0002-9041-8322",
       "kind": "human",
       "name": "Vikram Maram",
       "weight": 1.0,
-      "note": "Maintainer (individual). See GOVERNANCE.md."
+      "note": "Maintainer (individual). See GOVERNANCE.md. ORCID is the durable handle; the github: alias is the handle earlier reviews were recorded under.",
+      "aliases": [
+        "github:vikram-learnco"
+      ]
     },
     {
       "id": "claude-fable-5-1",

@@ -49,7 +49,7 @@ jobs:
               '',
               'During v0.x, pull requests are merged only from the contributor',
               'list, because a stable ID space needs one editor deciding what an',
-              '`oml:` ID means. That is a rule about merge rights, not about the',
+              '`miscon:` ID means. That is a rule about merge rights, not about the',
               'value of your work.',
               '',
               '**The front door is an issue**, and it is not a lesser path:',

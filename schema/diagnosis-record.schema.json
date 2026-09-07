@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://open-misconceptions.github.io/oml/schema/diagnosis-record.schema.json",
-  "title": "OML diagnosis record",
-  "description": "One diagnosed learner response: the item, what was expected, what was given, and which OML misconceptions the response is evidence for. Schema version 0.1.",
+  "$id": "https://open-misconceptions.github.io/miscon-data/schema/diagnosis-record.schema.json",
+  "title": "Open Misconceptions diagnosis record",
+  "description": "One diagnosed learner response: the item, what was expected, what was given, and which Open Misconceptions the response is evidence for. Schema version 0.1.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["item", "expected", "response", "diagnoses", "oml_version", "engine_version"],
+  "required": ["item", "expected", "response", "diagnoses", "miscon_version", "engine_version"],
   "properties": {
     "$schema": { "type": "string" },
     "item": {
@@ -24,16 +24,16 @@
     },
     "diagnoses": {
       "type": "array",
-      "description": "Zero or more misconceptions the response is evidence for, most confident first. Empty means no OML record matched.",
+      "description": "Zero or more misconceptions the response is evidence for, most confident first. Empty means no record matched.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["oml_id", "confidence", "matched_pattern"],
+        "required": ["miscon_id", "confidence", "matched_pattern"],
         "properties": {
-          "oml_id": {
+          "miscon_id": {
             "type": "string",
             "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$",
-            "description": "OML record id (without the `oml:` prefix)."
+            "description": "Open Misconceptions record id (without the `miscon:` prefix)."
           },
           "confidence": {
             "type": "number",
@@ -50,7 +50,7 @@
         }
       }
     },
-    "oml_version": {
+    "miscon_version": {
       "type": "string",
       "minLength": 1,
       "description": "Library release the diagnosis was made against (e.g. `0.1.0`)."
@@ -62,7 +62,7 @@
     },
     "tenant_local_id": {
       "type": "string",
-      "description": "A local misconception id when the diagnosis is against a record not (yet) in OML."
+      "description": "A local misconception id when the diagnosis is against a record not (yet) in Open Misconceptions."
     },
     "insufficient_evidence": {
       "type": "boolean",

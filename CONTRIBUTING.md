@@ -1,8 +1,8 @@
-# Contributing to OML
+# Contributing to Open Misconceptions
 
 **The front door is an issue, not a pull request.**
 
-OML is a catalogue of misconceptions, not of wrong answers. A record earns
+Open Misconceptions is a catalogue of misconceptions, not of wrong answers. A record earns
 its place by stating a belief a learner could hold, giving the evidence
 pattern that reveals it, and saying where the claim comes from. Anyone can
 propose one. Merging is reserved to maintainers, and during v0.x pull
@@ -22,8 +22,9 @@ issue. You need:
   added by adding the numerators and adding the denominators" is a belief.
   "1/2 + 1/3 = 2/5" is a wrong answer; that belongs in the example.
 * **A kind.** The mechanism: `overgeneralization`, `undergeneralization`,
-  `procedural-bug`, `missing-prerequisite`, `notation-confusion`, or
-  `misapplied-analogy`.
+  `procedural-bug`, `notation-confusion`, or `misapplied-analogy`. There is
+  no kind for a missing prerequisite: an absence is a gap, not a belief, so
+  record the belief the learner does hold instead.
 * **One evidence pattern with a concrete example.** What task reveals it,
   what rule the learner follows, and one item with the correct response
   and the response a holder of the belief gives.
@@ -52,7 +53,7 @@ issue when two records describe the same belief. Name which ID should
 survive and why, and what evidence or sources exist only on the one being
 retired.
 
-**No `oml:` ID is ever deleted.** A merged record keeps its file, URI and
+**No `miscon:` ID is ever deleted.** A merged record keeps its file, URI and
 page; `history.merged_into` names the survivor and the redirect holds
 forever.
 
@@ -73,15 +74,15 @@ One pull request, one record.
    the topic.
 2. Create `records/<domain>/<rest-of-id>.json`. Generate a fresh UUID
    (`python3 -c "import uuid; print(uuid.uuid4())"`).
-3. Set `status: draft`. Leave `reviews` and `trust` alone; `oml trust`
+3. Set `status: draft`. Leave `reviews` and `trust` alone; `miscon trust`
    computes trust, and only registered reviewers may accept a record.
 4. Run the checks, commit what they regenerate, and open the PR:
 
 ```sh
-pip install -e tools/oml
-oml validate records/      # schema + cross-record checks; must pass
-oml trust                  # computes trust from reviews; commit the result
-oml index                  # regenerates records/INDEX.md; commit the result
+pip install -e tools/miscon
+miscon validate records/      # schema + cross-record checks; must pass
+miscon trust                  # computes trust from reviews; commit the result
+miscon index                  # regenerates records/INDEX.md; commit the result
 ```
 
 CI runs the same checks with `--strict`, so warnings block the merge too.
@@ -116,13 +117,13 @@ discriminators, sources), when, and with what `verdict`.
 | `llm-reviewed` | A model review with verdict `accept` covering `statement` and `evidence`. |
 | `reviewed` | A human `accept` from someone in the reviewer registry, or an attested review. |
 
-`oml validate` rejects a human `accept` from anyone not in
+`miscon validate` rejects a human `accept` from anyone not in
 [`reviewers/registry.json`](reviewers/registry.json), so adding yourself
 to a record achieves nothing. `draft` and `llm-reviewed` records are
 published and citable like any other; the status says how much scrutiny
 the record has had.
 
-`trust` (`low`, `medium`, `high`) is computed, not written. `oml trust`
+`trust` (`low`, `medium`, `high`) is computed, not written. `miscon trust`
 derives it from `reviews[]` and the registry weights, and CI fails if a
 stored value disagrees.
 
@@ -153,5 +154,5 @@ git commit -s -m "your message"
 The tooling under `tools/` is Python with `jsonschema` as its only
 dependency. Run `python -m unittest discover -s tools/tests` before
 opening a PR. Keep the validator strict: a new check belongs in
-`tools/oml/oml/validate.py` with a broken fixture in
+`tools/miscon/miscon/validate.py` with a broken fixture in
 `tools/tests/fixtures/broken/`.

@@ -8,7 +8,7 @@ body:
     attributes:
       label: Proposed ID
       description: Lowercase, dot-separated, hyphens inside segments. Check records/INDEX.md for neighbours first.
-      placeholder: math.frac.add-across
+      placeholder: math.fractions.add-across
     validations:
       required: true
   - type: textarea
@@ -26,7 +26,6 @@ body:
         - overgeneralization
         - undergeneralization
         - procedural-bug
-        - missing-prerequisite
         - notation-confusion
         - misapplied-analogy
     validations:
@@ -46,7 +45,7 @@ body:
     id: neighbours
     attributes:
       label: Nearest neighbours and how to tell them apart
-      description: Existing OML IDs that share an item shape, and the item that separates them.
+      description: Existing miscon: IDs that share an item shape, and the item that separates them.
   - type: textarea
     id: sources
     attributes:

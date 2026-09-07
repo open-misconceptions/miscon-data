@@ -1,17 +1,17 @@
 cff-version: 1.2.0
-message: "If you use the Open Misconception Library, please cite it as below. Cite individual records by their oml: ID and URI."
-title: "Open Misconception Library"
+message: "If you use the Open Misconceptions, please cite it as below. Cite individual records by their miscon: ID and URI."
+title: "Open Misconceptions"
 abstract: "A public, versioned catalogue of misconceptions with stable IDs, evidence patterns, discriminators and provenance, distributed as JSON and as a 1EdTech CASE 1.1 framework."
 type: dataset
 authors:
   - family-names: Maram
     given-names: Vikram
-  - name: "OML contributors"
+  - name: "Open Misconceptions contributors"
 version: 0.1.1
 date-released: 2026-09-05
 license: CC-BY-4.0
-repository-code: "https://github.com/open-misconceptions/oml"
-url: "https://open-misconceptions.github.io/oml"
+repository-code: "https://github.com/open-misconceptions/miscon-data"
+url: "https://open-misconceptions.github.io/miscon-data"
 keywords:
   - misconceptions
   - learning analytics

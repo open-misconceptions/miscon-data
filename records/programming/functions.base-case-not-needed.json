@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schema/miscon-record.schema.json",
+  "id": "programming.functions.base-case-not-needed",
+  "uri": "https://open-misconceptions.github.io/miscon-data/m/programming.functions.base-case-not-needed",
+  "uuid": "09dac977-0121-45e8-8a5c-0aa059faf59c",
+  "version": "0.1.2",
+  "status": "draft",
+  "trust": "low",
+  "title": "A recursive function stops by itself",
+  "statement": "A recursive function stops calling itself when there is nothing left to do, so it does not need an explicit base case.",
+  "kind": "misapplied-analogy",
+  "domain": "programming.functions",
+  "about": [
+    {
+      "scheme": "Miscon",
+      "uri": "https://open-misconceptions.github.io/miscon-data/c/programming.functions.base-case"
+    }
+  ],
+  "level_band": [
+    "middle",
+    "secondary",
+    "undergraduate"
+  ],
+  "locale": "en",
+  "evidence_patterns": [
+    {
+      "item_shape": "predict the behaviour of a recursive function with no base case",
+      "signature": "predicts termination with a sensible answer",
+      "example": {
+        "item": "def count_down(n):\n    print(n)\n    count_down(n - 1)\ncount_down(3)",
+        "expected": "3 2 1 0 -1 ... until the recursion limit is hit",
+        "response": "3 2 1"
+      }
+    },
+    {
+      "item_shape": "write a recursive function",
+      "signature": "omits the base case",
+      "example": {
+        "item": "Write factorial(n) recursively.",
+        "expected": "if n == 0: return 1\nreturn n * factorial(n - 1)",
+        "response": "return n * factorial(n - 1)"
+      }
+    }
+  ],
+  "discriminators": {
+    "vs_slip": "A slip is one forgotten base case the learner adds when asked how it stops. The belief is the answer 'it stops when n runs out'.",
+    "vs": {
+      "programming.functions.recursion-as-loop": "Loop-model holders often include a base case but expect only one copy of the variables; base-case omitters expect the function to stop on its own."
+    }
+  },
+  "relations": {
+    "conflicts_with": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.functions.base-case",
+        "label": "A recursive function stops only when a base case returns"
+      }
+    ],
+    "resolved_by": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.functions.base-case",
+        "label": "A recursive function stops only when a base case returns"
+      },
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.functions.recursion",
+        "label": "Each recursive call has its own activation with its own variables"
+      }
+    ],
+    "confusable_with": [
+      "programming.functions.recursion-as-loop"
+    ]
+  },
+  "alignments": [
+    {
+      "scheme": "progmiscon",
+      "code": "Scratch/BaseCaseNotNeeded",
+      "uri": "https://progmiscon.org/misconceptions/Scratch/BaseCaseNotNeeded",
+      "relation": "close-match"
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "type": "inventory",
+        "citation": "Chiodini, L., Moreno Santos, I., Gallidabino, A., Tafliovich, A., Santos, A. L., & Hauswirth, M. (2021). A curated inventory of programming language misconceptions. In Proceedings of the 26th ACM Conference on Innovation and Technology in Computer Science Education (ITiCSE '21), 380-386.",
+        "doi": "10.1145/3430665.3456343",
+        "url": "https://progmiscon.org/",
+        "note": "Inventory consulted for the misconception name and scope only; progmiscon publishes no licence for its text, so Open Misconceptions' statements and examples are written independently."
+      },
+      {
+        "type": "paper",
+        "citation": "Kahney, H. (1983). What do novice programmers know about recursion? In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '83), 235-239.",
+        "doi": "10.1145/800045.801618"
+      },
+      {
+        "type": "paper",
+        "citation": "Götschi, T., Sanders, I., & Galpin, V. (2003). Mental models of recursion. In Proceedings of the 34th SIGCSE Technical Symposium on Computer Science Education (SIGCSE '03), 346-350.",
+        "doi": "10.1145/611892.612004"
+      }
+    ],
+    "origin": "llm-drafted",
+    "notes": "Drafted from the cited literature for the Open Misconceptions seed pack; statement, examples and discriminators are original text. Awaiting maintainer review."
+  },
+  "history": {
+    "changelog": [
+      {
+        "version": "0.1.1",
+        "date": "2026-09-05",
+        "change": "Schema 0.2 migration: about/alignments carry a free-string scheme (corestandards.org URLs relabelled CCSS where present); trust computed from reviews[] (none yet, so low); no change to the statement or evidence."
+      },
+      {
+        "version": "0.1.2",
+        "date": "2026-09-07",
+        "change": "Re-kinded from the withdrawn `missing-prerequisite` to `misapplied-analogy`: the belief carries everyday stopping-when-done reasoning, and loop intuition, into recursion, which is a belief the learner holds rather than an absence."
+      }
+    ]
+  },
+  "license": "CC-BY-4.0"
+}

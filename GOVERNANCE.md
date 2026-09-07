@@ -3,7 +3,7 @@
 **Open to propose, earned to write, one editor to bless.**
 
 Anyone may propose a misconception. Nobody but a maintainer merges. The
-library's value is that an `oml:` ID means the same thing this year as
+library's value is that a `miscon:` ID means the same thing this year as
 last, so the bar to change what an ID says is deliberately higher than
 the bar to suggest one.
 
@@ -25,7 +25,7 @@ good.
 
 Reviewer status is recorded in `reviewers/registry.json`, which also
 carries the trust weight each reviewer's accept contributes. The registry
-is the authority: `oml validate` rejects a `reviewed` record whose human
+is the authority: `miscon validate` rejects a `reviewed` record whose human
 reviewer is not listed there, so adding yourself to a record achieves
 nothing.
 
@@ -36,7 +36,7 @@ Each class names who may make it and what else must happen.
 ### 1. Add a new `draft` record
 
 *Who:* Proposer (via issue) or Contributor (via PR). *Requires:* CI green,
-which means the schema, the cross-record checks and `oml trust --check`
+which means the schema, the cross-record checks and `miscon trust --check`
 all pass. A new record enters at `draft` with `trust: low`. No review is
 needed to be published; `draft` says plainly how much scrutiny it has had.
 
@@ -49,7 +49,7 @@ either a `human` accept from someone in the reviewer registry, or an
 asserts the misconception.
 
 *Requires:* the review is appended to `reviews[]`, never substituted for
-an existing one, and `oml trust` is rerun so the computed `trust` matches.
+an existing one, and `miscon trust` is rerun so the computed `trust` matches.
 
 ### 3. Edit the `statement` of a `reviewed` record
 
@@ -69,12 +69,21 @@ the first kind.
 
 *Who:* maintainer only.
 
-**An `oml:` ID is never deleted.** A merged record keeps its file, its
+**The permanence guarantee starts at v0.2.0.** This release renamed every
+identifier in the library -- prefix, area segments and all -- which is
+exactly the thing the rule below forbids. Saying nothing about that would
+make the rule worthless, so: v0.1.x IDs, formerly written with the `oml:`
+prefix, do not resolve and are not redirected. The break was taken
+deliberately, at zero adopters, to fix a name that collided with three
+live projects, and it is the last one. From v0.2.0 the rule below is
+unconditional.
+
+**A `miscon:` ID is never deleted.** A merged record keeps its file, its
 URI and its page; `status` becomes `merged` and `history.merged_into`
 names the survivor. A deprecated record keeps everything and gains
 `history.deprecated_reason`. Both keep resolving forever, and the site
 and the JSON both point a reader at the successor. A consumer who stored
-`oml:math.frac.add-across` in a gradebook in 2026 can still resolve it in
+`miscon:math.fractions.add-across` in a gradebook in 2026 can still resolve it in
 2036, whatever we later decide about that record.
 
 The surviving record gains `history.supersedes` and folds in any evidence
@@ -124,7 +133,7 @@ CC BY rather than a public-domain waiver, deliberately.
 accepts either and prefers neither; its flagship, the Gene Ontology, is
 CC BY 4.0 with a citation policy asking for the release version and the
 DOI. The obligation lands on redistribution, not on use: nothing about
-ingesting these records or storing an `oml:` ID asks anything of an
+ingesting these records or storing a `miscon:` ID asks anything of an
 adopter. What it buys is that a redistributed copy still says where it
 came from, which is the whole mechanism by which a small vocabulary
 accumulates a record of who built it.
@@ -136,7 +145,7 @@ the maintainer:
 
 **Use and redistribute the library freely, provided its origin is
 acknowledged. Do not alter it and then redistribute the result under the
-original name, or with the same `oml:` identifiers.** Change the name,
+original name, or with the same `miscon:` identifiers.** Change the name,
 change the prefix, or contribute the change back. An altered copy wearing
 the original name breaks the one promise an ID scheme makes — that the
 same ID means the same thing everywhere.
@@ -147,8 +156,8 @@ rather than an alteration, and it is meant to carry the name and the IDs.
 
 **An identifier is authoritative only if it resolves at the Open
 Misconception Library's own resolver.** Anyone may mint a string shaped
-like `oml:math.frac.something`; only its presence in this registry makes
-it real. If you cannot resolve it here, it is not an `oml:` ID, whatever
+like `miscon:math.fractions.something`; only its presence in this registry makes
+it real. If you cannot resolve it here, it is not a `miscon:` ID, whatever
 it is called.
 
 Text must be original or from a CC BY compatible source. Do not paste
@@ -183,11 +192,11 @@ Everything needed for that is already in place, deliberately:
 * Every release is archived at Zenodo with a DOI, so the full history
   survives the repository disappearing.
 * The dataset is mirrored on Hugging Face.
-* The IDs are strings, not URLs into any one host. `oml:math.frac.add-across`
+* The IDs are strings, not URLs into any one host. `miscon:math.fractions.add-across`
   keeps meaning what it means whoever serves it, and the tooling can move
   the library to a new base URI in one command.
 
-An `oml:` ID is meant to outlive the person maintaining it. If it cannot,
+A `miscon:` ID is meant to outlive the person maintaining it. If it cannot,
 it is not worth adopting.
 
 ## Changing this document

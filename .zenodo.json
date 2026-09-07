@@ -1,5 +1,5 @@
 {
-  "title": "Open Misconception Library",
+  "title": "Open Misconceptions",
   "upload_type": "dataset",
   "description": "A public, versioned catalogue of misconceptions with stable IDs. Each record states a belief, its kind, the evidence pattern that reveals it, discriminators against slips and neighbouring misconceptions, and provenance. Distributed as JSON records, JSON Lines, CSV and a 1EdTech CASE 1.1 framework. Most records in early releases are status draft.",
   "creators": [
@@ -18,12 +18,12 @@
   ],
   "related_identifiers": [
     {
-      "identifier": "https://github.com/open-misconceptions/oml",
+      "identifier": "https://github.com/open-misconceptions/miscon-data",
       "relation": "isSupplementTo",
       "scheme": "url"
     },
     {
-      "identifier": "https://open-misconceptions.github.io/oml",
+      "identifier": "https://open-misconceptions.github.io/miscon-data",
       "relation": "isDescribedBy",
       "scheme": "url"
     }
