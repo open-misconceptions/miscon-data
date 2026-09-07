@@ -24,12 +24,12 @@ One misconception. Required fields first.
 | `evidence_patterns[]` | At least one `{item_shape, signature, example{item, expected, response}}`. |
 | `provenance` | `{sources[], origin}`; every source has `type` and `citation`, optionally `doi`, `url`, `identifier`, `license`. |
 | `license` | Always `CC-BY-4.0`. |
-| `about[]` | Concepts the misconception is about: `{scheme, uri, code?, note?}`. Give `code` whenever the scheme has one; for CCSS it is required in practice, because those URIs no longer resolve and the code is the only usable handle. `scheme` is a free string; known schemes are data in `schemes/registry.json` and the validator warns on unknown ones. Prefer `CASE` item URIs; `Miscon` concept URIs (`<base>/c/<concept-id>`) only where no CASE URI exists. |
+| `about[]` | Concepts the misconception is about: `{scheme, uri, code, note?}`. `code` is **required for every scheme but `Miscon`**: an external URI can stop resolving without warning (every CCSS URI here now 404s), and the code is then the only part a reader can act on. `Miscon` is exempt because its URI is `<base>/c/<concept-id>` and the concept ID is the code. `scheme` is a free string; known schemes are data in `schemes/registry.json` and the validator warns on unknown ones. Prefer `CASE` item URIs; `Miscon` concept URIs only where no CASE URI exists. |
 | `level_band[]` | Education levels where it is typically seen. |
 | `locale` | BCP 47 tag for the text; default `en`. |
 | `discriminators` | `vs_slip` (systematic vs one-off) and `vs{<neighbour-id>: text}`. |
 | `relations` | Closed object. `conflicts_with`, `resolved_by` → concepts as `{external: <uri>}`; `confusable_with` (symmetric), `specializes` → Open Misconceptions record ids. |
-| `alignments[]` | `{scheme, uri, code?, relation?, note?}` into external schemes. Same framework-agnostic shape as `about`. |
+| `alignments[]` | `{scheme, uri, code, relation?, note?}` into external schemes. Same framework-agnostic shape as `about`; every entry names an external scheme, so `code` is always required. |
 | `prevalence` | Reserved; not populated in v1. |
 | `reviews[]` | `{kind: human\|model\|attested, by, date, scope[], verdict: accept\|revise\|reject, notes?}`. `human.by` is a name plus a durable handle, `"Vikram Maram (github:vikram-learnco)"`; `model.by` is a model id and version; `attested.by` is an index into `provenance.sources[]`. `scope` values: `statement`, `evidence`, `discriminators`, `sources`. |
 | `history` | `supersedes[]`, `merged_into` (required when `merged`), `deprecated_reason`, `changelog[]`. |
@@ -75,9 +75,11 @@ One diagnosed learner response, for systems that emit diagnoses citing Open Misc
    warns when the reverse edge is missing) and `specializes` only.
    `co_occurs_with` and `blocked_by` were dropped before any release.
 2. **`about` and `alignments` are framework-agnostic.** The schema encodes
-   the shape `{scheme, uri, code?, note?}` and never an enum of frameworks;
+   the shape `{scheme, uri, code, note?}` and never an enum of frameworks;
    `schemes/registry.json` names the known ones. CASE URIs are preferred;
    corestandards.org URLs carry `CCSS` until their CASE GUIDs are confirmed.
+   `code` is required for every scheme except the internal `Miscon`, which is
+   exempt because its concept ID already is the code.
 4. **Review model.** `review` became `reviews[]` with human, model and
    attested kinds, a `draft` → `llm-reviewed` → `reviewed` lifecycle enforced
    by the validator, and `trust` computed from the reviewer registry.

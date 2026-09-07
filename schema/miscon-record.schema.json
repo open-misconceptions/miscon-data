@@ -86,7 +86,7 @@
     },
     "about": {
       "type": "array",
-      "description": "Concepts this misconception is about: {scheme, uri, code?, note?}. scheme is a free string; known schemes live in schemes/registry.json and the validator warns on unknown ones. Prefer CASE item URIs; use Miscon concept URIs (<base>/c/<id>) only where no CASE URI exists.",
+      "description": "Concepts this misconception is about: {scheme, uri, code, note?}. scheme is a free string; known schemes live in schemes/registry.json and the validator warns on unknown ones. Prefer CASE item URIs; use Miscon concept URIs (<base>/c/<id>) only where no CASE URI exists. `code` is required for every scheme but Miscon.",
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/alignment"
@@ -172,7 +172,7 @@
     },
     "alignments": {
       "type": "array",
-      "description": "Links to items in external schemes: {scheme, uri, code?, note?}. Framework-agnostic; see schemes/registry.json.",
+      "description": "Links to items in external schemes: {scheme, uri, code, note?}. Framework-agnostic; see schemes/registry.json. Every entry here names an external scheme, so `code` is always required.",
       "items": {
         "$ref": "#/$defs/alignment"
       }
@@ -441,15 +441,37 @@
     "alignment": {
       "type": "object",
       "additionalProperties": false,
+      "description": "A link to an item in some scheme. `code` is required for every external scheme and deliberately not required for the internal `Miscon` scheme; see the `code` description for why.",
       "required": [
         "scheme",
         "uri"
+      ],
+      "allOf": [
+        {
+          "$comment": "`code` is mandatory for external schemes. The exemption for `Miscon` is deliberate, not an oversight: see the `code` description below.",
+          "if": {
+            "required": [
+              "scheme"
+            ],
+            "properties": {
+              "scheme": {
+                "const": "Miscon"
+              }
+            }
+          },
+          "then": true,
+          "else": {
+            "required": [
+              "code"
+            ]
+          }
+        }
       ],
       "properties": {
         "scheme": {
           "type": "string",
           "pattern": "^[A-Za-z][A-Za-z0-9-]*$",
-          "description": "Name of the scheme, e.g. CASE, Miscon, CCSS, progmiscon. Free string; not an enum."
+          "description": "Name of the scheme, e.g. CASE, Miscon, CCSS, progmiscon. Free string; not an enum. `Miscon` names this library's own concept URIs and is the one scheme treated as internal."
         },
         "uri": {
           "type": "string",
@@ -458,7 +480,8 @@
         },
         "code": {
           "type": "string",
-          "description": "Human-readable code in the scheme (e.g. 5.NF.A.1, Java/AssignCompares)."
+          "minLength": 1,
+          "description": "Human-readable code in the scheme (e.g. 5.NF.A.1, Java/AssignCompares). Required for every scheme except `Miscon`. An external scheme's URI can stop resolving without warning -- every CCSS URI this library cites now 404s after corestandards.org was rebuilt -- and when it does, the code is the only part of the alignment a reader can still act on, so it is not allowed to be absent. `Miscon` is exempt because its URI is <base>/c/<concept-id> and the concept ID is itself the code: a separate field would restate it."
         },
         "label": {
           "type": "string"

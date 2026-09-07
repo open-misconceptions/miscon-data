@@ -14,7 +14,13 @@
   "about": [
     {
       "scheme": "CCSS",
+      "code": "5.NF.A.1",
       "uri": "http://corestandards.org/Math/Content/5/NF/A/1/"
+    },
+    {
+      "scheme": "Miscon",
+      "uri": "https://open-misconceptions.github.io/miscon-data/c/math.fractions.unlike-denominators",
+      "note": "Carries no code on purpose: Miscon is the internal scheme and the concept id in the URI is the code. This entry is what keeps that exemption covered by a test."
     }
   ],
   "level_band": [

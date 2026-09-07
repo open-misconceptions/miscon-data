@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schema/miscon-record.schema.json",
+  "id": "math.fractions.no-alignment-code",
+  "uri": "https://open-misconceptions.github.io/miscon-data/m/math.fractions.no-alignment-code",
+  "uuid": "7c1f0a92-4d3b-4e77-9a10-2f5b8c6d1e40",
+  "version": "0.1.0",
+  "status": "draft",
+  "trust": "low",
+  "title": "Alignment to an external scheme with no code",
+  "statement": "A denominator larger than the numerator means the fraction has to be written the other way round, because the smaller number always belongs on top.",
+  "kind": "overgeneralization",
+  "domain": "math.fractions",
+  "about": [
+    {
+      "scheme": "CCSS",
+      "code": "5.NF.A.1",
+      "uri": "http://corestandards.org/Math/Content/5/NF/A/1/"
+    }
+  ],
+  "level_band": [
+    "primary"
+  ],
+  "locale": "en",
+  "evidence_patterns": [
+    {
+      "item_shape": "write the fraction shown by a diagram where the shaded count exceeds one whole",
+      "signature": "numerator and denominator are swapped whenever the numerator would be the larger of the two",
+      "example": {
+        "item": "Write the fraction for 7 shaded thirds.",
+        "expected": "7/3",
+        "response": "3/7"
+      }
+    }
+  ],
+  "discriminators": {
+    "vs_slip": "Consistent: the learner swaps every improper fraction, and says the larger number belongs underneath when asked."
+  },
+  "alignments": [
+    {
+      "scheme": "CCSS",
+      "uri": "http://corestandards.org/Math/Content/3/NF/A/1/",
+      "relation": "about",
+      "note": "Deliberately missing `code`. This fixture exists to prove the schema rejects an external-scheme alignment with no code; it must fail for that reason and no other."
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "type": "book",
+        "citation": "Ashlock, R. B. (2010). Error Patterns in Computation: Using Error Patterns to Help Each Student Learn (10th ed.). Allyn & Bacon."
+      }
+    ],
+    "origin": "literature",
+    "notes": "Test fixture only. Not a claim about the corpus."
+  },
+  "history": {
+    "changelog": [
+      {
+        "version": "0.1.0",
+        "date": "2026-09-07",
+        "change": "Created as the fixture for the alignment-code requirement."
+      }
+    ]
+  },
+  "license": "CC-BY-4.0"
+}

@@ -38,6 +38,24 @@ class GoodFixtures(unittest.TestCase):
         self.assertEqual(report.errors, [], "\n".join(map(str, report.errors)))
         self.assertEqual(report.checked, 2)
 
+    def test_internal_scheme_is_exempt_from_the_code_requirement(self):
+        """`code` is required for external schemes; Miscon is deliberately exempt.
+
+        The good corpus carries a Miscon `about` entry with no code. If the
+        exemption is ever dropped, this fails rather than the exemption quietly
+        turning into an oversight nobody notices.
+        """
+        record = json.loads(
+            (FIXTURES / "good" / "records" / "math" / "fractions.add-across.json").read_text()
+        )
+        internal = [e for e in record["about"] if e["scheme"] == "Miscon"]
+        self.assertTrue(internal, "the good fixture should carry a Miscon about entry")
+        self.assertTrue(all("code" not in e for e in internal))
+
+        records = FIXTURES / "good" / "records"
+        report = validate_records(records, fixture_config(records))
+        self.assertEqual(report.errors, [], "\n".join(map(str, report.errors)))
+
 
 class BrokenFixtures(unittest.TestCase):
     def setUp(self):
@@ -97,6 +115,20 @@ class BrokenFixtures(unittest.TestCase):
 
     def test_invalid_json(self):
         self.assertProblem("fractions.not-json.json", "invalid JSON")
+
+    def test_external_alignment_needs_a_code(self):
+        self.assertProblem("fractions.no-alignment-code.json", "code")
+
+    def test_missing_code_is_the_only_error_in_that_fixture(self):
+        """The fixture must fail for the code and nothing else.
+
+        A fixture that fails for two reasons stops proving which rule caught it.
+        """
+        errors = [p for p in self.report.problems
+                  if p.path.name == "fractions.no-alignment-code.json" and p.level != "warning"]
+        self.assertTrue(errors, "expected the fixture to produce an error")
+        for problem in errors:
+            self.assertIn("code", problem.message, f"unexpected second failure: {problem.message}")
 
 
 class CliExitCodes(unittest.TestCase):
