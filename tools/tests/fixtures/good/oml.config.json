@@ -3,7 +3,7 @@
   "library_version": "0.1.0",
   "title": "Open Misconception Library",
   "creator": "Vikram Maram",
-  "license": "CC0-1.0",
-  "license_uri": "https://creativecommons.org/publicdomain/zero/1.0/",
-  "license_name": "Creative Commons Zero v1.0 Universal (public domain dedication)"
+  "license": "CC-BY-4.0",
+  "license_uri": "https://creativecommons.org/licenses/by/4.0/",
+  "license_name": "Creative Commons Attribution 4.0 International"
 }

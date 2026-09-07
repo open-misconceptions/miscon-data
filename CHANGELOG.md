@@ -13,15 +13,14 @@ Before 1.0, minor releases may also change the schema; each such change is calle
 
 ### Changed
 
-* **Records are CC0 1.0** (public domain), from this release onward. Adopters may use, adapt and redistribute without attributing or asking. A citation is welcome and not required. Tooling stays MIT. Releases **up to and including v0.1.1 were published under CC BY 4.0**; that grant is public and irrevocable, so those releases remain available under it. The record schema's `license` is now `const: "CC0-1.0"`, so a record carrying the old value no longer validates against the current schema — the v0.1.1 archive carries its own copy of the schema it was published with.
 * **The library moved to a neutral home.** Canonical base URI is now `https://open-misconceptions.github.io/oml`, and the repository is `open-misconceptions/oml`. **`oml:` IDs are unchanged and stable** — `oml:math.frac.add-across` still means exactly what it meant; only the host that resolves it moved. Applied with `oml rebase-uri`, which rewrote 188 references across 83 files. The Hugging Face dataset is now `open-misconceptions/oml`.
-
-### Changed
-
+* **The record licence is unchanged: CC BY 4.0.** A move to CC0 was considered for this release and rejected. CC BY's obligation lands on redistribution rather than use, it is what [OBO Foundry principle 1](https://obofoundry.org/principles/fp-001-open.html) and the Gene Ontology settle on for a resource of this kind, and it keeps the licence continuous across the DOI lineage. Tooling stays MIT. The CASE export's licence title is now read from `oml.config.json` instead of being hardcoded, so the exported document and the licence URL can no longer disagree.
 * **OML is maintained by Vikram Maram as an individual project.** The MIT copyright holder, the `creator` in `oml.config.json` (which flows into the CASE `CFDocument`), and the dataset-card attribution now name the maintainer rather than a company. Nothing about the `oml:` IDs changes.
 
 ### Added
 
+* **How to cite** in the README: the release version plus the concept DOI, modelled on the Gene Ontology's citation policy, with a note to cite a record's ID and URI alongside the release.
+* **The fork-naming norm** in `GOVERNANCE.md`, adapted from OBO Foundry principle 1: use and redistribute freely provided the origin is acknowledged, but do not alter the library and redistribute the result under the original name or with the same `oml:` identifiers. An identifier is authoritative only if it resolves at this library's own resolver — anyone may mint an `oml:`-shaped string; only the registry makes it real. The succession clause is the stated exception.
 * **Succession and the right to fork** in `GOVERNANCE.md`: if the maintainer is unresponsive for six months, the Reviewers named in the registry may fork under the same name and IDs, and that fork becomes the one to use. The licence, the Zenodo DOI, the Hugging Face mirror and host-independent IDs exist so that this is always possible.
 * **`oml rebase-uri <new-base>`**: moves the library to a new base URI, rewriting every record `uri`, every OML concept URI in `about[]` and `relations.*`, both schema `$id`s, the scheme registry's URI pattern, the config and the docs. Idempotent, `--dry-run` supported, and covered by round-trip tests — a record `uri` is a public identifier, so a partial rewrite is the failure mode worth engineering against.
 

@@ -1,5 +1,5 @@
 ---
-license: cc0-1.0
+license: cc-by-4.0
 pretty_name: Open Misconception Library
 language:
   - en
@@ -52,7 +52,7 @@ the repository's reviewer registry.
 | `relations` | `conflicts_with`, `resolved_by`, and provisional `confusable_with`, `specializes`, `co_occurs_with`, `blocked_by`. |
 | `alignments` | `{scheme, code, uri, relation, note}` into CCSS, progmiscon, etc. |
 | `provenance` | `{sources[], origin, notes}`. |
-| `reviews`, `history`, `license` | Reviews (`kind`, `by`, `date`, `scope`, `verdict`), merge/supersede history and changelog, always `CC0-1.0`. |
+| `reviews`, `history`, `license` | Reviews (`kind`, `by`, `date`, `scope`, `verdict`), merge/supersede history and changelog, always `CC-BY-4.0`. |
 
 Full field documentation: <https://github.com/open-misconceptions/oml/blob/main/schema/README.md>.
 
@@ -69,8 +69,5 @@ Concept DOI (latest release): https://doi.org/10.5281/zenodo.22416011. Each rele
 
 ## Licence
 
-CC0 1.0 — public domain. Use, adapt and redistribute for any purpose
-without attribution. A citation is welcome and not required.
-
-Releases up to v0.1.1 were published under CC BY 4.0 and remain available
-under it; v0.2.0 onward is CC0.
+CC BY 4.0. Attribute "Open Misconception Library (Vikram Maram and contributors)"
+and link to the repository or the record URI.

@@ -282,8 +282,8 @@
     },
     "license": {
       "type": "string",
-      "const": "CC0-1.0",
-      "description": "Licence for this record's content. Records are CC0 1.0 from v0.2.0 onward; releases up to v0.1.1 carry CC-BY-4.0 and keep it."
+      "const": "CC-BY-4.0",
+      "description": "Licence for this record's content. All records are CC BY 4.0."
     },
     "notes": {
       "type": "string",

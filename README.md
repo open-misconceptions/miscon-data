@@ -1,7 +1,7 @@
 # Open Misconception Library (OML)
 
 [![validate](https://github.com/open-misconceptions/oml/actions/workflows/validate.yml/badge.svg)](https://github.com/open-misconceptions/oml/actions/workflows/validate.yml)
-[![data: CC0 1.0](https://img.shields.io/badge/data-CC0%201.0-lightgrey.svg)](LICENSE-DATA)
+[![data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg)](LICENSE-DATA)
 [![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22416011.svg)](https://doi.org/10.5281/zenodo.22416011)
 [![Hugging Face dataset](https://img.shields.io/badge/dataset-open--misconceptions%2Foml-yellow.svg)](https://huggingface.co/datasets/open-misconceptions/oml)
@@ -89,18 +89,36 @@ proposals earns the right to open pull requests directly.
 * [GOVERNANCE.md](GOVERNANCE.md) — who may make which change, how disputes
   are settled, and why an `oml:` ID is never deleted.
 
+## How to cite
+
+Cite the release you actually used, and the concept DOI so the reference
+survives later versions:
+
+> Maram, Vikram, and contributors. *Open Misconception Library*, version
+> 0.1.1. Zenodo, 2026. <https://doi.org/10.5281/zenodo.22416011>
+
+The concept DOI [10.5281/zenodo.22416011](https://doi.org/10.5281/zenodo.22416011)
+always resolves to the latest release; each release also has its own
+version DOI. Machine-readable author and title metadata are in
+[`CITATION.cff`](CITATION.cff), which GitHub renders as "Cite this
+repository".
+
+When you cite a single record, cite its ID and URI as well as the release
+— `oml:math.frac.add-across`, at
+`https://open-misconceptions.github.io/oml/m/math.frac.add-across` — so a
+reader can tell which version of that record you meant.
+
 ## Licence
 
 Code under `tools/` and `site/` is [MIT](LICENSE). Everything under
-`records/`, `schema/` and `dist/` is [CC0 1.0](LICENSE-DATA) — public
-domain. You may use, adapt and redistribute the records for any purpose
-without asking, without attributing, and without thinking about who
-maintains them. That is deliberate: a shared vocabulary that carries
-obligations is one fewer platform's legal review away from adoption.
+`records/`, `schema/` and `dist/` is
+[CC BY 4.0](LICENSE-DATA). Cite the library when you redistribute the data.
 
-A citation is welcome and is not required. If you want to, the concept
-DOI is [10.5281/zenodo.22416011](https://doi.org/10.5281/zenodo.22416011).
-
-Releases up to and including v0.1.1 were published under CC BY 4.0. That
-grant is public and irrevocable, so those releases remain available under
-it; v0.2.0 onward is CC0.
+CC BY obliges attribution on **redistribution**, not on use. Reading the
+records, ingesting them, and storing an `oml:` ID in your own database
+oblige you to nothing. Bundling the dataset into something you ship, or
+publishing a dataset derived from it, means naming where it came from.
+That is the norm for shared vocabularies of this kind — the Gene Ontology
+is CC BY 4.0 on the same reasoning — and it is what
+[OBO Foundry principle 1](https://obofoundry.org/principles/fp-001-open.html)
+asks of an open ontology.

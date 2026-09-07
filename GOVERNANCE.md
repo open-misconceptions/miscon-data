@@ -11,7 +11,7 @@ the bar to suggest one.
 
 | Role | Who | May |
 |------|-----|-----|
-| **Reader** | anyone | Read, use, adapt and redistribute. CC0, so no attribution required and no account needed. |
+| **Reader** | anyone | Read, cite, redistribute under CC BY 4.0. No account needed. |
 | **Proposer** | anyone | Open issues: propose a misconception, dispute a record, request a merge. This is the front door. |
 | **Contributor** | invited | Open pull requests. Merge still belongs to maintainers. Earned by three accepted proposals. |
 | **Reviewer** | nominated by a maintainer | Everything a Contributor may do, plus add a `human` review that promotes a record to `reviewed`. Listed in [`reviewers/registry.json`](reviewers/registry.json). |
@@ -115,15 +115,41 @@ honest fix is to say so here, not to promise faster.
 
 ## Licence and provenance
 
-Records, schemas and distributions are **CC0 1.0** (public domain);
-tooling is MIT. CC0 is a waiver, not a licence: contributing a record
-places it in the public domain and you keep no right to be attributed.
-Contribute only text you are free to release on those terms.
+Records, schemas and distributions are CC BY 4.0; tooling is MIT. By
+proposing or contributing you agree your text is released under those
+terms.
 
-The reason for CC0 rather than an attribution licence: an adopter should
-never have to attribute, or think about, whoever maintains this. A
-vocabulary that carries obligations is one more thing for a platform's
-legal review to object to.
+CC BY rather than a public-domain waiver, deliberately.
+[OBO Foundry principle 1](https://obofoundry.org/principles/fp-001-open.html)
+accepts either and prefers neither; its flagship, the Gene Ontology, is
+CC BY 4.0 with a citation policy asking for the release version and the
+DOI. The obligation lands on redistribution, not on use: nothing about
+ingesting these records or storing an `oml:` ID asks anything of an
+adopter. What it buys is that a redistributed copy still says where it
+came from, which is the whole mechanism by which a small vocabulary
+accumulates a record of who built it.
+
+### Naming a fork
+
+Adapted from OBO Foundry principle 1, and binding on everyone including
+the maintainer:
+
+**Use and redistribute the library freely, provided its origin is
+acknowledged. Do not alter it and then redistribute the result under the
+original name, or with the same `oml:` identifiers.** Change the name,
+change the prefix, or contribute the change back. An altered copy wearing
+the original name breaks the one promise an ID scheme makes — that the
+same ID means the same thing everywhere.
+
+The succession clause below is the deliberate exception: a fork by the
+named Reviewers, after the maintainer has gone silent, is a continuation
+rather than an alteration, and it is meant to carry the name and the IDs.
+
+**An identifier is authoritative only if it resolves at the Open
+Misconception Library's own resolver.** Anyone may mint a string shaped
+like `oml:math.frac.something`; only its presence in this registry makes
+it real. If you cannot resolve it here, it is not an `oml:` ID, whatever
+it is called.
 
 Text must be original or from a CC BY compatible source. Do not paste
 item text, distractor rationales or misconception descriptions from
@@ -152,7 +178,8 @@ adopters can follow.
 
 Everything needed for that is already in place, deliberately:
 
-* The licence is CC0, so redistribution and modification need nobody's permission — including a successor's.
+* The licence permits redistribution and modification by anyone,
+  including a successor, with attribution as the only condition.
 * Every release is archived at Zenodo with a DOI, so the full history
   survives the repository disappearing.
 * The dataset is mirrored on Hugging Face.
