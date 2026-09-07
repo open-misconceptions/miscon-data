@@ -21,7 +21,7 @@ Tick each item, or say why it does not apply.
 - [ ] `provenance.sources[]` is present with citations and DOIs or URLs where they exist.
 - [ ] No proprietary text: statement and examples are original; sources are cited, not copied.
 - [ ] `status` is `draft` (maintainers only may set `reviewed`).
-- [ ] `oml validate records/` passes locally (including the duplicate-similarity warning) and `records/INDEX.md` and `oml trust` output are regenerated.
+- [ ] `miscon validate records/` passes locally (including the duplicate-similarity warning) and `records/INDEX.md` and `miscon trust` output are regenerated.
 - [ ] Every commit is signed off (`git commit -s`) per the DCO.
 
 ## For merges and disputes

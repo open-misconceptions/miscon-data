@@ -1,6 +1,6 @@
 ---
 license: cc-by-4.0
-pretty_name: Open Misconception Library
+pretty_name: Open Misconceptions
 language:
   - en
 tags:
@@ -12,10 +12,10 @@ size_categories:
   - n<1K
 configs:
   - config_name: default
-    data_files: oml.jsonl
+    data_files: miscon.jsonl
 ---
 
-# Open Misconception Library (OML)
+# Open Misconceptions
 
 A public catalogue of misconceptions with stable IDs. Each row is one
 record: a belief a learner could hold, its kind, the evidence pattern that
@@ -23,10 +23,10 @@ reveals it (with a concrete example), discriminators against slips and
 neighbouring misconceptions, alignments to external schemes, and
 provenance.
 
-This dataset mirrors `dist/oml.jsonl` from the tagged release of
-<https://github.com/vikram-learnco/oml>. The canonical form of a record is
+This dataset mirrors `dist/miscon.jsonl` from the tagged release of
+<https://github.com/open-misconceptions/miscon-data>. The canonical form of a record is
 its stable URI, for example
-<https://oml.learnco.io/m/math.frac.add-across>.
+<https://open-misconceptions.github.io/miscon-data/m/math.fractions.add-across>.
 
 ## Provenance caveat
 
@@ -40,12 +40,12 @@ the repository's reviewer registry.
 
 | Field | Meaning |
 |-------|---------|
-| `id` | Stable ID (`math.frac.add-across`). Cite as `oml:<id>`. |
+| `id` | Stable ID (`math.fractions.add-across`). Cite as `miscon:<id>`. |
 | `uri` | Stable URI. |
 | `uuid` | Opaque identifier; the CASE `CFItem.identifier`. |
 | `version`, `status`, `trust` | Record semver; lifecycle (`draft`, `llm-reviewed`, `reviewed`, `deprecated`, `merged`); computed trust (`low`, `medium`, `high`). |
 | `title`, `statement`, `notes` | Short label, the belief as the learner holds it, and optional notes such as likely origins. |
-| `kind` | Mechanism: overgeneralization, undergeneralization, procedural-bug, missing-prerequisite, notation-confusion, misapplied-analogy. |
+| `kind` | Mechanism: overgeneralization, undergeneralization, procedural-bug, notation-confusion, misapplied-analogy. |
 | `domain`, `about`, `level_band`, `locale` | Subject, concepts, education levels, language. |
 | `evidence_patterns` | List of `{item_shape, signature, example{item, expected, response}}`. |
 | `discriminators` | `vs_slip` and `vs{<neighbour-id>: text}`. |
@@ -54,13 +54,13 @@ the repository's reviewer registry.
 | `provenance` | `{sources[], origin, notes}`. |
 | `reviews`, `history`, `license` | Reviews (`kind`, `by`, `date`, `scope`, `verdict`), merge/supersede history and changelog, always `CC-BY-4.0`. |
 
-Full field documentation: <https://github.com/vikram-learnco/oml/blob/main/schema/README.md>.
+Full field documentation: <https://github.com/open-misconceptions/miscon-data/blob/main/schema/README.md>.
 
 ## Load
 
 ```python
 from datasets import load_dataset
-ds = load_dataset("vikram-learnco/oml")
+ds = load_dataset("open-misconceptions/miscon-data")
 ```
 
 ## Cite
@@ -69,5 +69,5 @@ Concept DOI (latest release): https://doi.org/10.5281/zenodo.22416011. Each rele
 
 ## Licence
 
-CC BY 4.0. Attribute "Open Misconception Library (Vikram Maram and contributors)"
+CC BY 4.0. Attribute "Open Misconceptions (Vikram Maram and contributors)"
 and link to the repository or the record URI.

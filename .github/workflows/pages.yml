@@ -22,9 +22,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -e tools/oml
-      - run: oml validate records/
-      - run: oml build-site --out _site
+      - run: pip install -e tools/miscon
+      - run: miscon validate records/
+      - run: miscon build-site --out _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

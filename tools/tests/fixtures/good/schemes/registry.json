@@ -1,5 +1,5 @@
 {
-  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `oml validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema.",
+  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `miscon validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema. `dereferenceable: false` marks a scheme whose URIs are identifiers that do not resolve; the site shows the `code` for those instead of offering a dead link.",
   "schemes": [
     {
       "name": "CASE",
@@ -8,14 +8,16 @@
       "homepage": "https://www.1edtech.org/standards/case"
     },
     {
-      "name": "OML",
-      "description": "OML concept URIs, <base>/c/<concept-id>, used only where no CASE URI exists.",
-      "uri_pattern": "^https://oml\\.learnco\\.io/c/[a-z]+(\\.[a-z0-9-]+)+$",
-      "homepage": "https://oml.learnco.io"
+      "name": "Miscon",
+      "description": "Miscon concept URIs, <base>/c/<concept-id>, used only where no CASE URI exists.",
+      "uri_pattern": "^https://open\\-misconceptions\\.github\\.io/miscon\\-data/c/[a-z]+(\\.[a-z0-9-]+)+$",
+      "homepage": "https://open-misconceptions.github.io/miscon-data"
     },
     {
       "name": "CCSS",
       "description": "Common Core State Standards canonical URLs on corestandards.org.",
+      "dereferenceable": false,
+      "note": "The /Math/Content/ URLs do not resolve: corestandards.org was rebuilt and every one of them now 404s. They are kept because this URL form is the identifier that CASE frameworks and the Achievement Standards Network align on, so changing it would trade a dead link for a broken alignment. Cite the `code` (5.NF.A.1); treat the URI as an identifier, not an address.",
       "uri_pattern": "^https?://(www\\.)?corestandards\\.org/.+",
       "homepage": "http://www.corestandards.org/"
     },

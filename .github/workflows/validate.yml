@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   validate:
-    name: oml validate
+    name: miscon validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,20 +18,20 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: tools/oml/pyproject.toml
+          cache-dependency-path: tools/miscon/pyproject.toml
       - name: Install tooling
-        run: pip install -e tools/oml
+        run: pip install -e tools/miscon
       - name: Run tests
         run: python -m unittest discover -s tools/tests
       - name: Validate records
         id: validate
         run: |
           set -o pipefail
-          oml validate records/ --strict 2> errors.txt | tee summary.txt
+          miscon validate records/ --strict 2> errors.txt | tee summary.txt
       - name: Summary
         if: always()
         run: |
-          echo "### oml validate" >> "$GITHUB_STEP_SUMMARY"
+          echo "### miscon validate" >> "$GITHUB_STEP_SUMMARY"
           if [ -f summary.txt ]; then cat summary.txt >> "$GITHUB_STEP_SUMMARY"; fi
           if [ -s errors.txt ]; then
             echo "" >> "$GITHUB_STEP_SUMMARY"
@@ -40,10 +40,10 @@ jobs:
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Check trust is current
-        run: oml trust --check
+        run: miscon trust --check
       - name: Check INDEX.md is current
         run: |
-          oml index
-          git diff --exit-code -- records/INDEX.md || { echo "::error::records/INDEX.md is stale; run 'oml index' and commit"; exit 1; }
+          miscon index
+          git diff --exit-code -- records/INDEX.md || { echo "::error::records/INDEX.md is stale; run 'miscon index' and commit"; exit 1; }
       - name: Exports build
-        run: oml export all --version ci
+        run: miscon export all --version ci

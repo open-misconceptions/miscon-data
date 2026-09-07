@@ -5,10 +5,12 @@ __pycache__/
 .venv/
 site/_build/
 .DS_Store
-site/_build/
 
 # generated; committed by the release workflow only
-dist/oml.case.json
-dist/oml.jsonl
-dist/oml.csv
-\ntools/tests/fixtures/*/reviewers/\ntools/tests/fixtures/*/schemes/\n
+dist/miscon.case.json
+dist/miscon.jsonl
+dist/miscon.csv
+
+# runtime copies of the registries inside a fixture tree
+tools/tests/fixtures/*/reviewers/
+tools/tests/fixtures/*/schemes/

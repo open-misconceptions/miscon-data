@@ -1,0 +1,663 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-misconceptions.github.io/miscon-data/schema/miscon-record.schema.json",
+  "title": "Open Misconceptions record",
+  "description": "One misconception in Open Misconceptions. Schema version 0.2 (v0.1.1 release): framework-agnostic alignments, reviews[] with a status lifecycle, computed trust.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "uri",
+    "uuid",
+    "version",
+    "status",
+    "title",
+    "statement",
+    "kind",
+    "domain",
+    "evidence_patterns",
+    "provenance",
+    "license"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional pointer to this schema for editor support."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$",
+      "description": "Stable, human-readable ID. Lowercase, dot-separated; the first segment is the domain. Never reused."
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://[^/]+(/[^/]+)*/m/[a-z]+(\\.[a-z0-9-]+)+$",
+      "description": "Stable URI: base URI + /m/ + id. The base may carry a path (a GitHub Pages project site is <owner>.github.io/<repo>), so the host is not required to be the whole prefix. `miscon validate` pins the exact value against the configured base."
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Opaque identifier, unique across the library. Used as the CASE CFItem identifier."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of this record's content. Bump patch for wording, minor for added evidence, major for a changed statement."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "llm-reviewed",
+        "reviewed",
+        "deprecated",
+        "merged"
+      ],
+      "description": "Lifecycle: draft -> llm-reviewed -> reviewed -> deprecated | merged. llm-reviewed needs at least one model review with verdict accept covering statement and evidence; reviewed needs at least one human accept or one attested review. merged requires history.merged_into. The validator enforces the review rules."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120,
+      "description": "Short label for the misconception, a noun phrase."
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 10,
+      "description": "The belief, stated as the learner would hold it. A belief, not a wrong answer."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "overgeneralization",
+        "undergeneralization",
+        "procedural-bug",
+        "notation-confusion",
+        "misapplied-analogy"
+      ],
+      "description": "Mechanism by which the belief arises. A misconception is a belief; a missing prerequisite is an absence, so it is not a kind here -- record the belief the learner holds instead."
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "^[a-z]+(\\.[a-z0-9-]+)*$",
+      "description": "Subject area, matching the first segment of `id` (e.g. `math`, `prog`). May be qualified (`math.fractions`)."
+    },
+    "about": {
+      "type": "array",
+      "description": "Concepts this misconception is about: {scheme, uri, code?, note?}. scheme is a free string; known schemes live in schemes/registry.json and the validator warns on unknown ones. Prefer CASE item URIs; use Miscon concept URIs (<base>/c/<id>) only where no CASE URI exists.",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/alignment"
+      }
+    },
+    "level_band": {
+      "type": "array",
+      "description": "Education levels where the misconception is typically observed.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "early-primary",
+          "primary",
+          "middle",
+          "secondary",
+          "upper-secondary",
+          "undergraduate",
+          "graduate",
+          "adult",
+          "any"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+      "description": "BCP 47 tag for the language of `statement` and examples. Default `en`."
+    },
+    "evidence_patterns": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Observable response patterns that indicate the belief. At least one, each with a concrete example.",
+      "items": {
+        "$ref": "#/$defs/evidence_pattern"
+      }
+    },
+    "discriminators": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "How to tell this misconception apart from a slip and from its nearest neighbours.",
+      "properties": {
+        "vs_slip": {
+          "type": "string",
+          "minLength": 5,
+          "description": "What distinguishes a systematic holder of this belief from someone who made a one-off error."
+        },
+        "vs": {
+          "type": "object",
+          "description": "Keyed by neighbouring Open Misconceptions id; value explains the observable difference.",
+          "propertyNames": {
+            "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 5
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "object",
+      "description": "Typed links. Closed object, decided 2026-09-05: conflicts_with and resolved_by point at Concepts (external URIs, or Miscon concept URIs); confusable_with and specializes point at Open Misconceptions records. confusable_with is symmetric; the validator warns when the reverse edge is missing. The record id/uri is the canonical public ID of the corresponding Knowledge Map Misconception node; there is no second identifier field.",
+      "additionalProperties": false,
+      "properties": {
+        "conflicts_with": {
+          "description": "Concepts this belief contradicts.",
+          "$ref": "#/$defs/concept_targets"
+        },
+        "resolved_by": {
+          "description": "Concepts whose understanding corrects this belief.",
+          "$ref": "#/$defs/concept_targets"
+        },
+        "confusable_with": {
+          "description": "Misconceptions that produce similar evidence and need a discriminator. Symmetric.",
+          "$ref": "#/$defs/misconception_targets"
+        },
+        "specializes": {
+          "description": "Broader misconceptions of which this is a special case.",
+          "$ref": "#/$defs/misconception_targets"
+        }
+      }
+    },
+    "alignments": {
+      "type": "array",
+      "description": "Links to items in external schemes: {scheme, uri, code?, note?}. Framework-agnostic; see schemes/registry.json.",
+      "items": {
+        "$ref": "#/$defs/alignment"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "origin"
+      ],
+      "description": "Where this record's claim comes from.",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "literature",
+            "inventory-import",
+            "practitioner",
+            "data-mined",
+            "llm-drafted"
+          ],
+          "description": "How the record entered the library. `llm-drafted` records must cite literature in `sources` and stay `draft` until reviewed."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "prevalence": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Reserved for measured prevalence. Out of scope for v1; shape is provisional.",
+      "properties": {
+        "population": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$"
+          },
+          "uniqueItems": true,
+          "description": "Older records this one replaces."
+        },
+        "merged_into": {
+          "type": "string",
+          "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$",
+          "description": "Required when status is `merged`. The surviving record."
+        },
+        "deprecated_reason": {
+          "type": "string"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "version",
+              "date",
+              "change"
+            ],
+            "properties": {
+              "version": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "date": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              "change": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": {
+      "type": "string",
+      "const": "CC-BY-4.0",
+      "description": "Licence for this record's content. All records are CC BY 4.0."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free text about the record that is not part of the belief itself, e.g. likely origins of the misconception."
+    },
+    "trust": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "Computed by `miscon trust` from reviews[] against reviewers/registry.json. Never hand-typed; the validator fails on a stored value that does not match the computed one."
+    },
+    "reviews": {
+      "type": "array",
+      "description": "Reviews of this record. Each entry records who reviewed what, when, and with which verdict. Human reviewers carry a durable handle; model reviewers carry a model id and version; attested reviews point at the provenance source that asserts the misconception.",
+      "items": {
+        "$ref": "#/$defs/review"
+      }
+    },
+    "disputed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True while an open dispute challenges this record. A disputed record stays live and citable; the site and the JSON show the flag and link the issues. Set by a maintainer when a dispute is accepted for ruling; see GOVERNANCE.md."
+    },
+    "disputes": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "URLs of dispute issues raised against this record, open or settled. Entries are never removed: a settled dispute stays as part of the record's history.",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https?://"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "reviewed",
+              "llm-reviewed"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "reviews"
+        ],
+        "properties": {
+          "reviews": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "merged"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "history"
+        ],
+        "properties": {
+          "history": {
+            "required": [
+              "merged_into"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "disputed": {
+            "const": true
+          }
+        },
+        "required": [
+          "disputed"
+        ]
+      },
+      "then": {
+        "required": [
+          "disputes"
+        ],
+        "properties": {
+          "disputes": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "evidence_pattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_shape",
+        "signature",
+        "example"
+      ],
+      "properties": {
+        "item_shape": {
+          "type": "string",
+          "minLength": 3,
+          "description": "The kind of task on which the pattern shows (e.g. `add two fractions with unlike denominators`)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 5,
+          "description": "The response rule a holder of the belief follows, stated so a grader could apply it."
+        },
+        "example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "item",
+            "expected",
+            "response"
+          ],
+          "properties": {
+            "item": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The task as shown to the learner."
+            },
+            "expected": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The correct response."
+            },
+            "response": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The response a holder of the belief gives."
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "alignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scheme",
+        "uri"
+      ],
+      "properties": {
+        "scheme": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9-]*$",
+          "description": "Name of the scheme, e.g. CASE, Miscon, CCSS, progmiscon. Free string; not an enum."
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "minLength": 1
+        },
+        "code": {
+          "type": "string",
+          "description": "Human-readable code in the scheme (e.g. 5.NF.A.1, Java/AssignCompares)."
+        },
+        "label": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "about",
+            "same-as",
+            "close-match",
+            "conflicts-with"
+          ],
+          "description": "How this record relates to the item. Default about."
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "citation"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "paper",
+            "book",
+            "inventory",
+            "dataset",
+            "standard",
+            "web",
+            "practitioner"
+          ]
+        },
+        "citation": {
+          "type": "string",
+          "minLength": 5,
+          "description": "Human-readable citation."
+        },
+        "doi": {
+          "type": "string",
+          "pattern": "^10\\.[0-9]{4,9}/\\S+$"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "identifier": {
+          "type": "string",
+          "description": "The source's own identifier for this misconception, if any."
+        },
+        "license": {
+          "type": "string",
+          "description": "Licence of the source, if text was reused."
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "concept_targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "external"
+        ],
+        "properties": {
+          "external": {
+            "type": "string",
+            "format": "uri",
+            "minLength": 1,
+            "description": "A CASE item URI, or a Miscon concept URI (<base>/c/<concept-id>), or another external concept URI."
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "misconception_targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]+(\\.[a-z0-9-]+)+$",
+        "description": "An Open Misconceptions record id."
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "by",
+        "date",
+        "scope",
+        "verdict"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "human",
+            "model",
+            "attested"
+          ]
+        },
+        "by": {
+          "description": "human: name plus a durable handle, e.g. \"Vikram Maram (github:vikram-learnco)\" or an ORCID. model: model id and version, e.g. claude-fable-5-1. attested: integer index into provenance.sources[] of the source asserting the misconception.",
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "For model reviews this pins the model's capability at review time."
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "statement",
+              "evidence",
+              "discriminators",
+              "sources"
+            ]
+          }
+        },
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "revise",
+            "reject"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "attested"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "by": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "human",
+                  "model"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "by": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

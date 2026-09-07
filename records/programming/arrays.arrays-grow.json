@@ -1,0 +1,94 @@
+{
+  "$schema": "../../schema/miscon-record.schema.json",
+  "id": "programming.arrays.arrays-grow",
+  "uri": "https://open-misconceptions.github.io/miscon-data/m/programming.arrays.arrays-grow",
+  "uuid": "c14aea0d-dc29-4cdc-9e08-bde06dfa0014",
+  "version": "0.1.1",
+  "status": "draft",
+  "trust": "low",
+  "title": "Arrays grow when you add to them",
+  "statement": "An array gets bigger by itself when you store something past its end, so its size does not need to be decided in advance.",
+  "kind": "overgeneralization",
+  "domain": "programming.arrays",
+  "about": [
+    {
+      "scheme": "Miscon",
+      "uri": "https://open-misconceptions.github.io/miscon-data/c/programming.arrays.fixed-size"
+    }
+  ],
+  "level_band": [
+    "secondary",
+    "undergraduate"
+  ],
+  "locale": "en",
+  "evidence_patterns": [
+    {
+      "item_shape": "predict a write one past the end of an array",
+      "signature": "predicts the array now has one more element",
+      "example": {
+        "item": "int[] a = new int[3];\na[3] = 7;\nSystem.out.println(a.length);",
+        "expected": "ArrayIndexOutOfBoundsException",
+        "response": "4"
+      }
+    }
+  ],
+  "discriminators": {
+    "vs_slip": "Consistent across items; the learner treats arrays like lists. A slip is a single off-by-one index."
+  },
+  "relations": {
+    "conflicts_with": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.arrays.fixed-size",
+        "label": "An array has a fixed length set when it is created"
+      }
+    ],
+    "resolved_by": [
+      {
+        "external": "https://open-misconceptions.github.io/miscon-data/c/programming.arrays.fixed-size",
+        "label": "An array has a fixed length set when it is created"
+      }
+    ]
+  },
+  "alignments": [
+    {
+      "scheme": "progmiscon",
+      "code": "Java/ArraysGrow",
+      "uri": "https://progmiscon.org/misconceptions/Java/ArraysGrow",
+      "relation": "close-match"
+    },
+    {
+      "scheme": "progmiscon",
+      "code": "Java/ArrayListIsArray",
+      "uri": "https://progmiscon.org/misconceptions/Java/ArrayListIsArray",
+      "relation": "close-match"
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "type": "inventory",
+        "citation": "Chiodini, L., Moreno Santos, I., Gallidabino, A., Tafliovich, A., Santos, A. L., & Hauswirth, M. (2021). A curated inventory of programming language misconceptions. In Proceedings of the 26th ACM Conference on Innovation and Technology in Computer Science Education (ITiCSE '21), 380-386.",
+        "doi": "10.1145/3430665.3456343",
+        "url": "https://progmiscon.org/",
+        "note": "Inventory consulted for the misconception name and scope only; progmiscon publishes no licence for its text, so Open Misconceptions' statements and examples are written independently."
+      },
+      {
+        "type": "paper",
+        "citation": "Kaczmarczyk, L. C., Petrick, E. R., East, J. P., & Herman, G. L. (2010). Identifying student misconceptions of programming. In Proceedings of the 41st ACM Technical Symposium on Computer Science Education (SIGCSE '10), 107-111.",
+        "doi": "10.1145/1734263.1734299"
+      }
+    ],
+    "origin": "llm-drafted",
+    "notes": "Drafted from the cited literature for the Open Misconceptions seed pack; statement, examples and discriminators are original text. Awaiting maintainer review."
+  },
+  "history": {
+    "changelog": [
+      {
+        "version": "0.1.1",
+        "date": "2026-09-05",
+        "change": "Schema 0.2 migration: about/alignments carry a free-string scheme (corestandards.org URLs relabelled CCSS where present); trust computed from reviews[] (none yet, so low); no change to the statement or evidence."
+      }
+    ]
+  },
+  "license": "CC-BY-4.0"
+}

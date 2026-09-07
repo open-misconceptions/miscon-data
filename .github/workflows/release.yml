@@ -23,8 +23,8 @@ jobs:
       # the hf CLI exchanges this job's GitHub OIDC token for a one-hour token scoped
       # to HF_OIDC_RESOURCE. No HF_TOKEN secret is needed; if one is set it is used
       # as a fallback. The mirror steps never fail the release.
-      HF_DATASET: vikram-learnco/oml
-      HF_OIDC_RESOURCE: datasets/vikram-learnco/oml
+      HF_DATASET: open-misconceptions/miscon-data
+      HF_OIDC_RESOURCE: datasets/open-misconceptions/miscon-data
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
     steps:
       - uses: actions/checkout@v4
@@ -41,23 +41,61 @@ jobs:
             echo "Tag ${RELEASE_TAG} does not exist; it will be created at ${GITHUB_SHA::7} when the release is published"
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: The library version must be the version being released
+        run: |
+          set -euo pipefail
+          want="${RELEASE_TAG#v}"
+          have="$(python3 -c 'import json; print(json.load(open("miscon.config.json"))["library_version"])')"
+          if [ "$have" != "$want" ]; then
+            {
+              echo "### Release refused"
+              echo
+              echo "\`library_version\` in \`miscon.config.json\` is \`${have}\`, but this release is \`${RELEASE_TAG}\`."
+              echo
+              echo "That field is hand-maintained and it is not cosmetic: the Pages site is built from"
+              echo "\`main\` and prints it in the footer, so releasing now would publish a site naming"
+              echo "the wrong version, with nothing to correct it afterwards."
+              echo
+              echo "Set it to \`${want}\`, commit, then release again."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::library_version is ${have}, expected ${want} for ${RELEASE_TAG}"
+            exit 1
+          fi
+          echo "library_version ${have} matches ${RELEASE_TAG}." | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -e tools/oml
+      - run: pip install -e tools/miscon
       - run: python -m unittest discover -s tools/tests
-      - run: oml validate records/ --strict
+      - run: miscon validate records/ --strict
+      - name: Stamp CITATION.cff with the tag
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime, os, pathlib, re
+
+          tag = os.environ["RELEASE_TAG"]
+          path = pathlib.Path("CITATION.cff")
+          text = path.read_text(encoding="utf-8")
+          text, n = re.subn(r"(?m)^version: .*$", f"version: {tag.lstrip('v')}", text, count=1)
+          assert n == 1, "CITATION.cff has no version field"
+          today = datetime.date.today().isoformat()
+          text, n = re.subn(r"(?m)^date-released: .*$", f"date-released: {today}", text, count=1)
+          assert n == 1, "CITATION.cff has no date-released field"
+          path.write_text(text, encoding="utf-8")
+          print(f"CITATION.cff stamped: version {tag.lstrip('v')}, date-released {today}")
+          PY
       - name: Export distributions stamped with the tag
-        run: oml export all --version "${RELEASE_TAG#v}"
+        run: miscon export all --version "${RELEASE_TAG#v}"
       - name: Attach distributions to the GitHub release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           target_commitish: ${{ steps.target.outputs.sha }}
           files: |
-            dist/oml.case.json
-            dist/oml.jsonl
-            dist/oml.csv
+            dist/miscon.case.json
+            dist/miscon.jsonl
+            dist/miscon.csv
             CITATION.cff
           generate_release_notes: true
 
@@ -72,8 +110,8 @@ jobs:
         continue-on-error: true
         run: |
           set -euo pipefail
-          hf upload "$HF_DATASET" dist/oml.jsonl oml.jsonl --repo-type dataset \
-            --commit-message "Mirror ${RELEASE_TAG} from vikram-learnco/oml"
+          hf upload "$HF_DATASET" dist/miscon.jsonl miscon.jsonl --repo-type dataset \
+            --commit-message "Mirror ${RELEASE_TAG} from open-misconceptions/miscon-data"
           hf upload "$HF_DATASET" dist/huggingface/README.md README.md --repo-type dataset \
             --commit-message "Dataset card for ${RELEASE_TAG}"
           echo "::notice::Mirrored ${RELEASE_TAG} to https://huggingface.co/datasets/${HF_DATASET}"
