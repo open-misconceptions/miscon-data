@@ -1,5 +1,5 @@
 {
-  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `miscon validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema. `dereferenceable: false` marks a scheme whose URIs are identifiers that do not resolve; the site shows the `code` for those instead of offering a dead link.",
+  "$comment": "Known alignment schemes. The record schema is framework-agnostic: `scheme` is a free string and this file is the data that names the ones we recognise. `miscon validate` warns (does not fail) on a scheme that is not listed here or a URI that does not match the listed pattern. Adding a framework is a change to this file, not to the schema. `dereferenceable: false` marks a scheme whose URIs are identifiers that do not resolve; the site shows the `code` for those instead of offering a dead link. Every alignment to a scheme here must carry a `code`, which the schema enforces: CCSS shows why, since its URIs stopped resolving and the code is all that survived. `Miscon` is the one exemption, because its concept ID is already the code.",
   "schemes": [
     {
       "name": "CASE",
