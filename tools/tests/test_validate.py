@@ -497,3 +497,72 @@ class TheNameIsRetired(unittest.TestCase):
                 if stale.search(line):
                     offenders.append(f"{path.relative_to(ROOT)}:{i}: {line.strip()}")
         self.assertEqual(offenders, [])
+
+
+class CcssAlignmentsCarryTheirCode(unittest.TestCase):
+    """Every Common Core URL the dataset cites now 404s: corestandards.org was
+    rebuilt and the /Math/Content/ paths are gone. The URIs stay -- that form is
+    what CASE frameworks and the ASN align on -- so the `code` is what a reader
+    can actually use, and it has to be present."""
+
+    @staticmethod
+    def _derive(uri: str) -> str | None:
+        import re
+
+        m = re.match(r"^https?://(?:www\.)?corestandards\.org/Math/Content/(.+?)/?$", uri)
+        return ".".join(m.group(1).split("/")) if m else None
+
+    def _entries(self):
+        for path in sorted((ROOT / "records").rglob("*.json")):
+            record = json.loads(path.read_text())
+            for field in ("about", "alignments"):
+                for entry in record.get(field, []) or []:
+                    if entry.get("scheme") == "CCSS":
+                        yield path.name, field, entry
+
+    def test_every_ccss_entry_has_a_code_derived_from_its_uri(self):
+        seen = 0
+        for name, field, entry in self._entries():
+            seen += 1
+            self.assertTrue(entry.get("code"), f"{name}: {field} CCSS entry has no code")
+            self.assertEqual(entry["code"], self._derive(entry["uri"]), f"{name}: {field}")
+        self.assertGreater(seen, 0)
+
+    def test_the_registry_says_ccss_does_not_resolve(self):
+        from miscon.trust import load_schemes
+
+        schemes = load_schemes(Config.load(ROOT))
+        self.assertIs(schemes["CCSS"].get("dereferenceable"), False)
+        self.assertIs(schemes["progmiscon"].get("dereferenceable", True), True)
+
+    def test_the_site_offers_no_link_to_a_scheme_that_does_not_resolve(self):
+        import tempfile
+
+        from miscon.site import build_site
+
+        config = Config.load(ROOT)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = build_site(config, out_dir=Path(tmp) / "site")
+            dead = [
+                p.name
+                for p in (out / "m").glob("*.html")
+                if 'href="http://corestandards.org' in p.read_text()
+                or 'href="https://corestandards.org' in p.read_text()
+            ]
+            self.assertEqual(dead, [])
+            page = (out / "m" / "math.fractions.add-across.html").read_text()
+            self.assertIn("CCSS 5.NF.A.1", page)
+
+    def test_scheme_reference_links_only_what_resolves(self):
+        from miscon.site import scheme_reference
+
+        schemes = {
+            "CCSS": {"name": "CCSS", "dereferenceable": False},
+            "progmiscon": {"name": "progmiscon"},
+        }
+        dead = scheme_reference(schemes, {"scheme": "CCSS", "code": "5.NF.A.1", "uri": "http://corestandards.org/x"})
+        self.assertNotIn("<a ", dead)
+        self.assertIn("CCSS 5.NF.A.1", dead)
+
+        live = scheme_reference(schemes, {"scheme": "progmiscon", "uri": "https://progmiscon.org/misconceptions/Java/X"})
+        self.assertIn("<a ", live)

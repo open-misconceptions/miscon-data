@@ -20,6 +20,7 @@ from pathlib import Path
 
 from .config import Config
 from .export import build_case, export, load_all
+from .trust import load_schemes
 
 CSS = """
 :root{--fg:#1a1a1a;--bg:#fff;--muted:#555;--line:#ddd;--accent:#0b5cad;--code:#f4f4f4;color-scheme:light dark}
@@ -84,15 +85,62 @@ def _record_link(config: Config, rid: str, by_id: dict[str, dict]) -> str:
     return f"<code>{esc(rid)}</code>"
 
 
-def _target_html(config: Config, t, by_id: dict[str, dict]) -> str:
+def resolves(schemes: dict[str, dict], uri: str) -> bool:
+    """Whether a URI belongs to a scheme whose URIs are addresses.
+
+    A relation target names no scheme, so the registry is matched by pattern:
+    a Common Core URL is a dead address whether it arrives through `about[]` or
+    through `relations.conflicts_with`.
+    """
+    import re
+
+    for scheme in schemes.values():
+        pattern = scheme.get("uri_pattern")
+        if pattern and re.match(pattern, uri):
+            return bool(scheme.get("dereferenceable", True))
+    return True
+
+
+def _target_html(config: Config, t, by_id: dict[str, dict], schemes: dict[str, dict] | None = None) -> str:
     if isinstance(t, str):
         return _record_link(config, t, by_id)
-    label = t.get("label") or t["external"]
-    return f'<a href="{esc(t["external"])}" rel="external">{esc(label)}</a> <span class="muted">(external)</span>'
+    uri = t["external"]
+    label = t.get("label") or uri
+    if schemes is not None and not resolves(schemes, uri):
+        return f'{esc(label)} <code class="muted">{esc(uri)}</code>'
+    return f'<a href="{esc(uri)}" rel="external">{esc(label)}</a> <span class="muted">(external)</span>'
 
 
-def render_record(config: Config, r: dict, by_id: dict[str, dict]) -> str:
+def scheme_reference(schemes: dict[str, dict], entry: dict) -> str:
+    """One `about[]` or `alignments[]` entry, rendered.
+
+    A scheme marked `dereferenceable: false` in `schemes/registry.json` has URIs
+    that are identifiers rather than addresses -- every Common Core
+    /Math/Content/ URL now 404s, and the URL form is kept because CASE and the
+    ASN align on it. Rendering those as links offers the reader a dead click and
+    hides the one part they can actually use, so the code leads and the URI is
+    shown as an identifier.
+    """
+    scheme = entry.get("scheme", "")
+    uri = entry.get("uri", "")
+    code = entry.get("code")
+    label = entry.get("label") or (f"{scheme} {code}".strip() if code else "") or uri
+    resolves = schemes.get(scheme, {}).get("dereferenceable", True)
+    if uri and resolves:
+        html = f'<a href="{esc(uri)}" rel="external">{esc(label)}</a>'
+    else:
+        html = esc(label)
+        if uri:
+            html += f' <code class="muted">{esc(uri)}</code>'
+    if not entry.get("label") and code:
+        return html
+    return html + (f' <span class="muted">({esc(scheme)})</span>' if scheme else "")
+
+
+def render_record(config: Config, r: dict, by_id: dict[str, dict], schemes: dict[str, dict] | None = None) -> str:
     rid = r["id"]
+    if schemes is None:
+        schemes = load_schemes(config)
     parts: list[str] = []
     parts.append(f'<p class="muted"><code>miscon:{esc(rid)}</code> · <span class="badge">{esc(r["status"])}</span> · trust <span class="badge">{esc(r.get("trust", "low"))}</span> · v{esc(r["version"])} · kind <code>{esc(r["kind"])}</code>' + (' · <span class="badge">disputed</span>' if r.get("disputed") else "") + '</p>')
     parts.append(f"<h1>{esc(r['title'])}</h1>")
@@ -117,7 +165,7 @@ def render_record(config: Config, r: dict, by_id: dict[str, dict]) -> str:
     if r.get("locale"):
         dl.append(("Locale", esc(r["locale"])))
     if r.get("about"):
-        dl.append(("About", "<br>".join(f'<a href="{esc(a["uri"])}">{esc(a.get("label") or a["uri"])}</a> <span class="muted">({esc(a["scheme"])})</span>' for a in r["about"])))
+        dl.append(("About", "<br>".join(scheme_reference(schemes, a) for a in r["about"])))
     parts.append("<dl>" + "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in dl) + "</dl>")
 
     parts.append("<h2>Evidence patterns</h2>")
@@ -146,15 +194,15 @@ def render_record(config: Config, r: dict, by_id: dict[str, dict]) -> str:
     if rels:
         parts.append("<h2>Relations</h2><dl>")
         for name, targets in rels.items():
-            parts.append(f"<dt><code>{esc(name)}</code></dt><dd>" + "<br>".join(_target_html(config, t, by_id) for t in targets) + "</dd>")
+            parts.append(f"<dt><code>{esc(name)}</code></dt><dd>" + "<br>".join(_target_html(config, t, by_id, schemes) for t in targets) + "</dd>")
         parts.append("</dl>")
 
     if r.get("alignments"):
         parts.append("<h2>Alignments</h2><ul>")
         for al in r["alignments"]:
-            label = f"{al['scheme']} {al.get('code', '')}".strip()
-            href = al.get("uri")
-            li = f'<a href="{esc(href)}" rel="external">{esc(label)}</a>' if href else f"{esc(label)} <code>{esc(al.get('guid', ''))}</code>"
+            li = scheme_reference(schemes, al)
+            if not al.get("uri") and al.get("guid"):
+                li += f" <code>{esc(al['guid'])}</code>"
             if al.get("relation"):
                 li += f' <span class="muted">({esc(al["relation"])})</span>'
             if al.get("note"):
@@ -298,9 +346,10 @@ def build_site(config: Config, out_dir: Path | None = None) -> Path:
 
     records = load_all(config)
     by_id = {r["id"]: r for r in records}
+    schemes = load_schemes(config)
 
     for r in records:
-        (out / "m" / f"{r['id']}.html").write_text(render_record(config, r, by_id), encoding="utf-8")
+        (out / "m" / f"{r['id']}.html").write_text(render_record(config, r, by_id, schemes), encoding="utf-8")
         (out / "m" / f"{r['id']}.json").write_text(json.dumps({k: v for k, v in r.items() if k != "$schema"}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     (out / "index.html").write_text(render_home(config, records, readme_first_paragraph(config)), encoding="utf-8")

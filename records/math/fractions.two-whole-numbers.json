@@ -13,10 +13,12 @@
   "about": [
     {
       "scheme": "CCSS",
+      "code": "3.NF.A.2",
       "uri": "http://corestandards.org/Math/Content/3/NF/A/2/"
     },
     {
       "scheme": "CCSS",
+      "code": "6.NS.C.6",
       "uri": "http://corestandards.org/Math/Content/6/NS/C/6/"
     }
   ],

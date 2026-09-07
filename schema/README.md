@@ -24,7 +24,7 @@ One misconception. Required fields first.
 | `evidence_patterns[]` | At least one `{item_shape, signature, example{item, expected, response}}`. |
 | `provenance` | `{sources[], origin}`; every source has `type` and `citation`, optionally `doi`, `url`, `identifier`, `license`. |
 | `license` | Always `CC-BY-4.0`. |
-| `about[]` | Concepts the misconception is about: `{scheme, uri, code?, note?}`. `scheme` is a free string; known schemes are data in `schemes/registry.json` and the validator warns on unknown ones. Prefer `CASE` item URIs; `Miscon` concept URIs (`<base>/c/<concept-id>`) only where no CASE URI exists. |
+| `about[]` | Concepts the misconception is about: `{scheme, uri, code?, note?}`. Give `code` whenever the scheme has one; for CCSS it is required in practice, because those URIs no longer resolve and the code is the only usable handle. `scheme` is a free string; known schemes are data in `schemes/registry.json` and the validator warns on unknown ones. Prefer `CASE` item URIs; `Miscon` concept URIs (`<base>/c/<concept-id>`) only where no CASE URI exists. |
 | `level_band[]` | Education levels where it is typically seen. |
 | `locale` | BCP 47 tag for the text; default `en`. |
 | `discriminators` | `vs_slip` (systematic vs one-off) and `vs{<neighbour-id>: text}`. |
