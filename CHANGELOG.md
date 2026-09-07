@@ -9,7 +9,7 @@ The library follows semantic versioning:
 
 Before 1.0, minor releases may also change the schema; each such change is called out below.
 
-## [Unreleased]
+## [0.2.0] - 2026-09-07
 
 ### Changed
 
@@ -43,7 +43,7 @@ Before 1.0, minor releases may also change the schema; each such change is calle
 
 ### Fixed
 
-* **The released `[0.1.1]` section said things v0.1.1 did not ship.** The move to the new home had run its find-and-replace through the released sections, making them claim the release mirrored to `open-misconceptions/oml`; `git show v0.1.1:CHANGELOG.md` says `vikram-learnco/oml`. Two bullets describing the `CONTRIBUTING.md` rework and the authoritative reviewer registry were also filed under `[0.1.1]` although both landed after the tag, and have moved to Unreleased. A changelog that edits its own history is worth less than no changelog. The link definitions at the foot are the deliberate exception: they are navigation, so they point at the repository's current home.
+* **The released `[0.1.1]` section said things v0.1.1 did not ship.** The move to the new home had run its find-and-replace through the released sections, making them claim the release mirrored to `open-misconceptions/oml`; `git show v0.1.1:CHANGELOG.md` says `vikram-learnco/oml`. Two bullets describing the `CONTRIBUTING.md` rework and the authoritative reviewer registry were also filed under `[0.1.1]` although both landed after the tag, and have moved to this release. A changelog that edits its own history is worth less than no changelog. The link definitions at the foot are the deliberate exception: they are navigation, so they point at the repository's current home.
 
 ## [0.1.1] - 2026-09-05
 
@@ -86,6 +86,6 @@ First citable release.
 
 * Base URI `https://oml.learnco.io` is a placeholder pending the domain decision.
 
-[Unreleased]: https://github.com/open-misconceptions/miscon-data/compare/v0.1.1...HEAD
+[0.2.0]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.2.0
 [0.1.1]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.1
 [0.1.0]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.0
