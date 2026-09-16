@@ -337,6 +337,56 @@ def _validate_one(
         report.problems.append(Problem(path, f"license must be {config.license!r}"))
 
 
+# The example citation in README.md. Anchored on the italic title so the version
+# is found by structure rather than by hunting loose version-shaped strings.
+_README_CITATION_VERSION = re.compile(r"\*Open Misconceptions\*,\s+version\s+(\d+\.\d+\.\d+)")
+
+
+def check_release_metadata(config: Config) -> list[Problem]:
+    """Check that every hand-maintained copy of the release version agrees.
+
+    `library_version` in the config is the one that CI already guards against the
+    tag, so it is the reference. The others drift silently: v0.2.0 shipped with
+    `CITATION.cff` still claiming 0.1.1, because the release workflow rewrote the
+    file it packaged rather than the file in the tree, and the tag is cut from the
+    tree. A release-time rewrite cannot reach the tag; only a check that runs
+    before the tag exists can, which is why this lives in `miscon validate`.
+
+    Files that are absent are skipped, so a fixture tree carrying only records and
+    a config still validates. That the real repository has them is asserted by the
+    test suite instead, so deleting one is not a silent pass.
+    """
+    problems: list[Problem] = []
+    want = config.library_version
+
+    citation = config.root / "CITATION.cff"
+    if citation.is_file():
+        found = re.search(r"(?m)^version:\s*(\S+)\s*$", citation.read_text(encoding="utf-8"))
+        if found is None:
+            problems.append(Problem(citation, "no `version:` field to check against library_version"))
+        elif found.group(1) != want:
+            problems.append(
+                Problem(
+                    citation,
+                    f"version is {found.group(1)!r} but miscon.config.json library_version is {want!r}; "
+                    "these are both hand-maintained and must be bumped in the same commit",
+                )
+            )
+
+    readme = config.root / "README.md"
+    if readme.is_file():
+        found = _README_CITATION_VERSION.search(readme.read_text(encoding="utf-8"))
+        if found and found.group(1) != want:
+            problems.append(
+                Problem(
+                    readme,
+                    f"the How to cite example cites version {found.group(1)!r} but library_version is {want!r}",
+                )
+            )
+
+    return problems
+
+
 def validate_diagnosis(path: Path, config: Config) -> Report:
     """Validate a diagnosis record file against the diagnosis schema."""
     report = Report(checked=1)

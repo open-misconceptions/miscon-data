@@ -33,9 +33,9 @@ that prefer opaque identifiers.
 
 To cite the library as a whole, use the concept DOI
 [10.5281/zenodo.22416011](https://doi.org/10.5281/zenodo.22416011), which always resolves to
-the latest release; each release also has its own version DOI (v0.1.1:
-[10.5281/zenodo.22416012](https://doi.org/10.5281/zenodo.22416012)). Author and title
-metadata are in [`CITATION.cff`](CITATION.cff). The whole library is also
+the latest release. Each release also has its own version DOI, shown on that
+release's Zenodo page and listed in [`CITATION.cff`](CITATION.cff), which also
+carries the author and title metadata. The whole library is also
 mirrored as the Hugging Face dataset
 [`open-misconceptions/miscon-data`](https://huggingface.co/datasets/open-misconceptions/miscon-data).
 
@@ -94,13 +94,14 @@ proposals earns the right to open pull requests directly.
 Cite the release you actually used, and the concept DOI so the reference
 survives later versions:
 
-> Maram, Vikram, and contributors. *Open Misconceptions*, version
-> 0.1.1. Zenodo, 2026. <https://doi.org/10.5281/zenodo.22416011>
+> Maram, Vikram, and contributors. *Open Misconceptions*, version 0.2.1.
+> Zenodo, 2026. <https://doi.org/10.5281/zenodo.22416011>
 
 The concept DOI [10.5281/zenodo.22416011](https://doi.org/10.5281/zenodo.22416011)
 always resolves to the latest release; each release also has its own
-version DOI. Machine-readable author and title metadata are in
-[`CITATION.cff`](CITATION.cff), which GitHub renders as "Cite this
+version DOI, which Zenodo mints when that release is archived and
+[`CITATION.cff`](CITATION.cff) records afterwards. Machine-readable author
+and title metadata are in the same file, which GitHub renders as "Cite this
 repository".
 
 When you cite a single record, cite its ID and URI as well as the release

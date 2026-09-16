@@ -53,7 +53,7 @@
     "miscon_version": {
       "type": "string",
       "minLength": 1,
-      "description": "Library release the diagnosis was made against (e.g. `0.1.0`)."
+      "description": "Open Misconceptions release the diagnosis was made against (e.g. `0.1.0`)."
     },
     "engine_version": {
       "type": "string",

@@ -9,6 +9,20 @@ The library follows semantic versioning:
 
 Before 1.0, minor releases may also change the schema; each such change is called out below.
 
+## [0.2.1] - 2026-09-16
+
+No record, schema or distribution changes. This release exists so that there is a tag whose citation metadata describes itself correctly.
+
+### Fixed
+
+* **`CITATION.cff` reported the wrong release, and did so at its own tag.** v0.2.0's tagged `CITATION.cff` read `version: 0.1.1`, `date-released: 2026-09-05`, so GitHub's "Cite this repository" widget offered v0.1.1 for a v0.2.0 release. The release workflow did rewrite the file and did report success -- but it rewrote only the copy it packaged as a release asset, and a tag is cut from the tree, so nothing done at release time can reach it. A release-time rewrite was structurally incapable of fixing this. `version` and `date-released` are now maintained in the release-prep commit next to `library_version`, and the rewrite step is gone. The v0.2.0 version DOI `10.5281/zenodo.22640845` is recorded in `identifiers` alongside the concept DOI, which is unchanged and remains the one to cite.
+* **The Pages footer still said "Library".** It read "Library version 0.2.0"; the word went out with the old project name in v0.2.0 and survived in this one user-facing string. It now reads "Version 0.2.0". The `library_version` key in `miscon.config.json` keeps its name deliberately -- renaming it would break consumers.
+* **The README and the dataset card advertised v0.1.1's version DOI as the example.** Both now point at the release's own Zenodo page instead of naming a version DOI, because the version DOI is minted when a release is archived: any specific one written into the repository is, by construction, at least one release out of date.
+
+### Added
+
+* **`miscon validate` fails when the hand-maintained versions disagree.** It compares `CITATION.cff`'s `version` and the README's How-to-cite example against `library_version`, so drift is caught on every pull request rather than at the next release. `release.yml` also checks `CITATION.cff` against the tag directly, alongside `library_version`, and its refusal message now says why the tag is the thing that matters.
+
 ## [0.2.0] - 2026-09-07
 
 ### Changed
@@ -86,6 +100,7 @@ First citable release.
 
 * Base URI `https://oml.learnco.io` is a placeholder pending the domain decision.
 
+[0.2.1]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.2.1
 [0.2.0]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.2.0
 [0.1.1]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.1
 [0.1.0]: https://github.com/open-misconceptions/miscon-data/releases/tag/v0.1.0

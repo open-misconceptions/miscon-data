@@ -12,7 +12,7 @@ from .duplicates import DEFAULT_THRESHOLD
 
 
 def _cmd_validate(args: argparse.Namespace) -> int:
-    from .validate import validate_records
+    from .validate import check_release_metadata, validate_records
 
     config = Config.load()
     target = Path(args.target) if args.target else config.records_dir
@@ -20,9 +20,17 @@ def _cmd_validate(args: argparse.Namespace) -> int:
         print(f"error: {target} does not exist", file=sys.stderr)
         return 2
     report = validate_records(target, config, duplicate_threshold=args.duplicate_threshold)
+    # Repo-level, so it is not part of validate_records: that function is also
+    # pointed at single files and at fixture corpora, where release metadata is
+    # none of its business.
+    metadata_problems = check_release_metadata(config)
     for problem in report.problems:
         print(problem, file=sys.stderr)
+    for problem in metadata_problems:
+        print(problem, file=sys.stderr)
     print(report.summary())
+    if metadata_problems:
+        return 1
     if args.strict and report.warnings:
         return 1
     return 0 if report.ok else 1
