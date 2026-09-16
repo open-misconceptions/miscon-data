@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
+import re
 import subprocess
 import sys
 import unittest
@@ -598,3 +600,78 @@ class CcssAlignmentsCarryTheirCode(unittest.TestCase):
 
         live = scheme_reference(schemes, {"scheme": "progmiscon", "uri": "https://progmiscon.org/misconceptions/Java/X"})
         self.assertIn("<a ", live)
+
+
+class ReleaseMetadata(unittest.TestCase):
+    """The version lives in several hand-maintained files and must agree in all of them.
+
+    v0.2.0 shipped with CITATION.cff still reading 0.1.1: the release workflow
+    rewrote the copy it packaged, which the tag can never contain. These tests
+    guard the replacement for that rewrite.
+    """
+
+    def setUp(self):
+        from miscon.validate import check_release_metadata
+
+        self.check = check_release_metadata
+        self.config = Config.load(ROOT)
+
+    def test_the_repo_agrees_with_itself(self):
+        problems = self.check(self.config)
+        self.assertEqual(problems, [], "\n".join(map(str, problems)))
+
+    def test_the_files_it_checks_actually_exist(self):
+        """Absent files are skipped, so their presence is asserted here instead.
+
+        Without this, deleting CITATION.cff would make the check pass silently --
+        the exact green-but-empty shape this repo keeps being bitten by.
+        """
+        self.assertTrue((ROOT / "CITATION.cff").is_file())
+        self.assertTrue((ROOT / "README.md").is_file())
+
+    def test_citation_version_must_match_library_version(self):
+        with self.mismatched("CITATION.cff", r"(?m)^version: .*$", "version: 9.9.9"):
+            problems = self.check(self.config)
+        self.assertTrue(problems, "a disagreeing CITATION.cff must be reported")
+        self.assertIn("CITATION.cff", str(problems[0]))
+        self.assertIn("9.9.9", str(problems[0]))
+
+    def test_readme_citation_example_must_match_library_version(self):
+        with self.mismatched(
+            "README.md",
+            r"\*Open Misconceptions\*, version \d+\.\d+\.\d+",
+            "*Open Misconceptions*, version 9.9.9",
+        ):
+            problems = self.check(self.config)
+        self.assertTrue(problems, "a disagreeing README citation example must be reported")
+        self.assertIn("README.md", str(problems[0]))
+
+    def test_cli_validate_fails_on_a_mismatch(self):
+        """The check has to reach the command CI actually runs, not just the library."""
+        import os
+        import subprocess
+        import sys
+
+        with self.mismatched("CITATION.cff", r"(?m)^version: .*$", "version: 9.9.9"):
+            proc = subprocess.run(
+                [sys.executable, "-m", "miscon", "validate", "records/", "--strict"],
+                cwd=ROOT,
+                env={**os.environ},
+                capture_output=True,
+                text=True,
+            )
+        self.assertNotEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("CITATION.cff", proc.stderr)
+
+    @contextlib.contextmanager
+    def mismatched(self, name: str, pattern: str, replacement: str):
+        """Temporarily break one file, then put it back whatever happens."""
+        path = ROOT / name
+        original = path.read_text(encoding="utf-8")
+        broken, n = re.subn(pattern, replacement, original, count=1)
+        assert n == 1, f"{name}: test pattern {pattern!r} matched nothing"
+        path.write_text(broken, encoding="utf-8")
+        try:
+            yield
+        finally:
+            path.write_text(original, encoding="utf-8")
