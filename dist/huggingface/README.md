@@ -65,7 +65,7 @@ ds = load_dataset("open-misconceptions/miscon-data")
 
 ## Cite
 
-Concept DOI (latest release): https://doi.org/10.5281/zenodo.22416011. Each release also has a version DOI (v0.1.1: https://doi.org/10.5281/zenodo.22416012). Author and title metadata are in `CITATION.cff` in the repository.
+Concept DOI (latest release): https://doi.org/10.5281/zenodo.22416011. Each release also has its own version DOI, shown on that release's Zenodo page and listed in `CITATION.cff` in the repository, which also carries the author and title metadata.
 
 ## Licence
 

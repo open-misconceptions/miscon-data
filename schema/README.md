@@ -57,7 +57,7 @@ One diagnosed learner response, for systems that emit diagnoses citing Open Misc
 | `expected` | The correct response. |
 | `response` | What the learner gave; may be empty. |
 | `diagnoses[]` | `{miscon_id, confidence 0..1, matched_pattern, rationale?}`; may be empty. |
-| `miscon_version` | Library release diagnosed against. |
+| `miscon_version` | Open Misconceptions release diagnosed against. |
 | `engine_version` | Identifier and version of the diagnosing system. |
 | `tenant_local_id` | Local id when the diagnosis is against a record not in Open Misconceptions. |
 | `insufficient_evidence` | `true` when the response was too thin to diagnose. |

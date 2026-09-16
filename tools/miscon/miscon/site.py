@@ -71,7 +71,7 @@ def page(config: Config, title: str, body: str, *, description: str = "", canoni
 {body}
 </main>
 <footer>
-<p>Records are <a href="{esc(config.license_uri)}">{esc(config.license)}</a>. Tooling is MIT. Library version {esc(config.library_version)}.</p>
+<p>Records are <a href="{esc(config.license_uri)}">{esc(config.license)}</a>. Tooling is MIT. Version {esc(config.library_version)}.</p>
 <p><a href="https://github.com/open-misconceptions/miscon-data/blob/main/GOVERNANCE.md">Governance</a> · <a href="https://github.com/open-misconceptions/miscon-data/blob/main/CONTRIBUTING.md">How to propose a record</a> · <a href="https://github.com/open-misconceptions/miscon-data">Source</a></p>
 </footer>
 </body>

@@ -7,8 +7,8 @@ authors:
   - family-names: Maram
     given-names: Vikram
   - name: "Open Misconceptions contributors"
-version: 0.1.1
-date-released: 2026-09-05
+version: 0.2.1
+date-released: 2026-09-16
 license: CC-BY-4.0
 repository-code: "https://github.com/open-misconceptions/miscon-data"
 url: "https://open-misconceptions.github.io/miscon-data"
@@ -24,6 +24,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.22416011
     description: "Concept DOI, resolves to the latest release."
+  - type: doi
+    value: 10.5281/zenodo.22640845
+    description: "Version DOI for v0.2.0."
   - type: doi
     value: 10.5281/zenodo.22416012
     description: "Version DOI for v0.1.1."
